@@ -4,17 +4,18 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { CheckCircle, XCircle, Loader } from "lucide-react";
+import { CheckCircle, XCircle, Loader, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { useContext } from "react";
 import xpContext from "@/contexts/xp";
+import { ComboIndicator } from "@/components/gamification/ComboMultiplier";
 
 const FillUps = ({ task, roadmapId, chapterNumber }) => {
   const [userAnswer, setUserAnswer] = useState("");
   const [isAnswered, setIsAnswered] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
-  const { getXp, awardXP } = useContext(xpContext);
+  const { getXp, awardXP, combo, incrementCombo, resetCombo, getCurrentMultiplier } = useContext(xpContext);
 
   const handleInputChange = (e) => {
     if (isAnswered) return;
@@ -22,7 +23,7 @@ const FillUps = ({ task, roadmapId, chapterNumber }) => {
   };
 
   const checkAnswer = async () => {
-    let isCorrect = false;
+    let correct = false;
     setSubmitting(true);
     const normalizedUserAnswer = task.caseSensitive ? userAnswer.trim() : userAnswer.trim().toLowerCase();
 
@@ -30,7 +31,7 @@ const FillUps = ({ task, roadmapId, chapterNumber }) => {
       task.caseSensitive ? answer.trim() : answer.trim().toLowerCase()
     );
 
-    isCorrect = normalizedAcceptableAnswers.includes(normalizedUserAnswer);
+    correct = normalizedAcceptableAnswers.includes(normalizedUserAnswer);
 
     const res = await fetch(`/api/tasks`, {
       method: "POST",
@@ -39,15 +40,31 @@ const FillUps = ({ task, roadmapId, chapterNumber }) => {
       },
       body: JSON.stringify({
         task,
-        isCorrect,
+        isCorrect: correct,
         roadmap: roadmapId,
         chapter: chapterNumber,
         userAnswer,
       }),
     });
     if (res.ok) {
-      setIsCorrect(isCorrect);
+      setIsCorrect(correct);
       setIsAnswered(true);
+
+      // Handle combo system
+      if (correct) {
+        incrementCombo();
+        // Show toast for combo XP after a small delay so combo updates first
+        setTimeout(() => {
+          const multiplier = getCurrentMultiplier();
+          if (multiplier > 1) {
+            toast.success(`+${2 * multiplier} XP (${multiplier}x combo!)`, {
+              icon: <Zap className="h-4 w-4 text-yellow-500" />,
+            });
+          }
+        }, 100);
+      } else {
+        resetCombo();
+      }
 
       // XP is now awarded server-side in /api/tasks
       getXp();
@@ -71,6 +88,8 @@ const FillUps = ({ task, roadmapId, chapterNumber }) => {
         <CardHeader className="rounded-t-lg">
           <div className="flex justify-between items-center">
             <CardTitle className="text-xl font-semibold">Fill in the blank</CardTitle>
+            {/* Show combo indicator if active */}
+            {combo >= 2 && <ComboIndicator combo={combo} />}
           </div>
         </CardHeader>
 

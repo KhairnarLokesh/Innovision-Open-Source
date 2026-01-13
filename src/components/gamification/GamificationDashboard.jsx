@@ -2,7 +2,7 @@
 import { useState, useEffect, useContext } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+import { AnimatedProgress, CircularProgress } from "@/components/ui/animated-progress";
 import { Trophy, Flame, Award, Crown, Medal } from "lucide-react";
 import * as Icons from "lucide-react";
 import xpContext from "@/contexts/xp";
@@ -142,7 +142,13 @@ export default function GamificationDashboard({ userId }) {
           </div>
         </CardHeader>
         <CardContent>
-          <Progress value={xpProgress} className="h-2" />
+          <AnimatedProgress 
+            value={xpProgress} 
+            color="xp" 
+            size="md"
+            glow
+            delay={300}
+          />
         </CardContent>
       </Card>
 

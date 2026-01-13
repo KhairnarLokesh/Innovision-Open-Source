@@ -32,6 +32,24 @@ async function completeChapter(chapter, roadmapId, user) {
 
         const newXP = (stats.xp || 0) + xpGained;
         const newLevel = Math.floor(newXP / 1000) + 1;
+        
+        // Check for badges
+        const currentBadges = stats.badges || [];
+        const newBadges = [...currentBadges];
+        
+        // First course badge - awarded on first chapter completion
+        if (!currentBadges.includes("first_course")) {
+          newBadges.push("first_course");
+        }
+        
+        // Check streak badges
+        const streak = stats.streak || 1;
+        if (streak >= 7 && !currentBadges.includes("week_streak")) {
+          newBadges.push("week_streak");
+        }
+        if (streak >= 30 && !currentBadges.includes("month_streak")) {
+          newBadges.push("month_streak");
+        }
 
         transaction.set(
           statsRef,
@@ -39,6 +57,7 @@ async function completeChapter(chapter, roadmapId, user) {
             ...stats,
             xp: newXP,
             level: newLevel,
+            badges: newBadges,
             lastActive: new Date().toISOString(),
             achievements: [
               ...(stats.achievements || []),
@@ -152,6 +171,26 @@ export async function POST(req) {
 
             const newXP = (stats.xp || 0) + xpGained;
             const newLevel = Math.floor(newXP / 1000) + 1;
+            
+            // Check for new badges
+            const currentBadges = stats.badges || [];
+            const newBadges = [...currentBadges];
+            
+            // Perfect score badge - awarded on first correct quiz answer
+            if (!currentBadges.includes("perfect_score")) {
+              newBadges.push("perfect_score");
+            }
+            
+            // Night Owl badge - studying between 12 AM - 4 AM
+            const hour = new Date().getHours();
+            if (hour >= 0 && hour < 4 && !currentBadges.includes("night_owl")) {
+              newBadges.push("night_owl");
+            }
+            
+            // Early Bird badge - studying between 4 AM - 6 AM
+            if (hour >= 4 && hour < 6 && !currentBadges.includes("early_bird")) {
+              newBadges.push("early_bird");
+            }
 
             transaction.set(
               statsRef,
@@ -159,6 +198,7 @@ export async function POST(req) {
                 ...stats,
                 xp: newXP,
                 level: newLevel,
+                badges: newBadges,
                 lastActive: new Date().toISOString(),
                 achievements: [
                   ...(stats.achievements || []),

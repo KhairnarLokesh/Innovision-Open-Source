@@ -51,11 +51,11 @@ export default function GamificationPage() {
           <TabsContent value="overview" className="space-y-0">
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
               <div className="lg:col-span-3">
-                <GamificationDashboard userId={session.user.email} />
+                <GamificationDashboard userId={user.email} />
               </div>
 
               <div className="lg:col-span-1">
-                <Leaderboard currentUserId={session.user.email} />
+                <Leaderboard currentUserId={user.email} />
               </div>
             </div>
           </TabsContent>
@@ -63,10 +63,10 @@ export default function GamificationPage() {
           <TabsContent value="analytics" className="space-y-0">
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
               <div className="lg:col-span-2">
-                <XPChart userId={session.user.email} />
+                <XPChart userId={user.email} />
               </div>
               <div className="lg:col-span-3">
-                <StreakCalendar userId={session.user.email} />
+                <StreakCalendar userId={user.email} />
               </div>
             </div>
           </TabsContent>
@@ -74,10 +74,10 @@ export default function GamificationPage() {
           <TabsContent value="challenges" className="space-y-0">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               <div className="lg:col-span-2">
-                <DailyChallenges userId={session.user.email} />
+                <DailyChallenges userId={user.email} />
               </div>
               <div className="lg:col-span-1">
-                <Leaderboard currentUserId={session.user.email} />
+                <Leaderboard currentUserId={user.email} />
               </div>
             </div>
           </TabsContent>

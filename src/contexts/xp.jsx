@@ -3,6 +3,9 @@
 import { createContext, useState, useEffect, useCallback, useRef } from "react";
 import { useAuth } from "@/contexts/auth";
 import confetti from "canvas-confetti";
+import LevelUpModal from "@/components/gamification/LevelUpModal";
+import { showAchievementToast, achievements } from "@/components/gamification/AchievementToast";
+import ComboMultiplier, { getMultiplier } from "@/components/gamification/ComboMultiplier";
 
 const xpContext = createContext();
 
@@ -15,8 +18,16 @@ export const XpProvider = ({ children }) => {
   const [level, setLevel] = useState(1);
   const [show, setShow] = useState(false);
   const [changed, setChanged] = useState(0);
+  const [showLevelUpModal, setShowLevelUpModal] = useState(false);
+  const [levelUpData, setLevelUpData] = useState({ newLevel: 1, xpGained: 0, totalXP: 0 });
   const prevXpRef = useRef(0);
   const prevLevelRef = useRef(1);
+  const shownMilestonesRef = useRef(new Set());
+  
+  // Combo multiplier state
+  const [combo, setCombo] = useState(0);
+  const [showCombo, setShowCombo] = useState(false);
+  const comboTimeoutRef = useRef(null);
 
   // Fire confetti for achievements
   const fireConfetti = useCallback((type = "default") => {
@@ -33,28 +44,16 @@ export const XpProvider = ({ children }) => {
         break;
 
       case "level_up":
-        const duration = 2000;
-        const end = Date.now() + duration;
-        const frame = () => {
-          confetti({
-            particleCount: 3,
-            angle: 60,
-            spread: 55,
-            origin: { x: 0, y: 0.7 },
-            colors: ["#6366f1", "#8b5cf6", "#a855f7"],
-            zIndex: 9999,
-          });
-          confetti({
-            particleCount: 3,
-            angle: 120,
-            spread: 55,
-            origin: { x: 1, y: 0.7 },
-            colors: ["#6366f1", "#8b5cf6", "#a855f7"],
-            zIndex: 9999,
-          });
-          if (Date.now() < end) requestAnimationFrame(frame);
-        };
-        frame();
+        // Level up modal handles its own confetti
+        break;
+        
+      case "combo":
+        confetti({
+          ...defaults,
+          particleCount: 30,
+          spread: 50,
+          colors: ["#3B82F6", "#8B5CF6", "#F97316"],
+        });
         break;
 
       default:
@@ -62,19 +61,120 @@ export const XpProvider = ({ children }) => {
     }
   }, []);
 
-  // Check for XP milestones
+  // Award a badge to the user
+  const awardBadge = useCallback(async (badgeId) => {
+    if (!user?.email) return;
+    
+    try {
+      const res = await fetch("/api/gamification/award-badge", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user.email, badgeId }),
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        // Show achievement toast for new badge
+        showAchievementToast({
+          title: "Badge Earned!",
+          description: `You unlocked a new badge: ${badgeId.replace(/_/g, " ")}`,
+          xp: 25,
+          icon: "trophy",
+          type: "badge",
+        });
+        fireConfetti("xp_milestone");
+      }
+      return data;
+    } catch (error) {
+      console.error("Error awarding badge:", error);
+    }
+  }, [user, fireConfetti]);
+
+  // Increment combo on correct answer
+  const incrementCombo = useCallback(() => {
+    setCombo(prev => {
+      const newCombo = prev + 1;
+      console.log("Combo incremented to:", newCombo);
+      
+      // Show combo popup when reaching 2+ streak
+      if (newCombo >= 2) {
+        setShowCombo(true);
+        
+        // Fire confetti at tier thresholds
+        if (newCombo === 2 || newCombo === 5 || newCombo === 10 || newCombo === 20) {
+          fireConfetti("combo");
+        }
+        
+        setTimeout(() => setShowCombo(false), 3000);
+      }
+      
+      return newCombo;
+    });
+    
+    // Reset combo after 60 seconds of inactivity (longer for better UX)
+    if (comboTimeoutRef.current) {
+      clearTimeout(comboTimeoutRef.current);
+    }
+    comboTimeoutRef.current = setTimeout(() => {
+      setCombo(0);
+      console.log("Combo reset due to timeout");
+    }, 60000);
+  }, [fireConfetti]);
+
+  // Reset combo on wrong answer
+  const resetCombo = useCallback(() => {
+    setCombo(0);
+    if (comboTimeoutRef.current) {
+      clearTimeout(comboTimeoutRef.current);
+    }
+  }, []);
+
+  // Get current multiplier
+  const getCurrentMultiplier = useCallback(() => {
+    return getMultiplier(combo);
+  }, [combo]);
+
+  // Check for XP milestones and show achievement toasts
   const checkMilestones = useCallback((oldXP, newXP, oldLevel, newLevel) => {
     // Check XP milestones
     for (const milestone of XP_MILESTONES) {
-      if (oldXP < milestone && newXP >= milestone) {
+      if (oldXP < milestone && newXP >= milestone && !shownMilestonesRef.current.has(`xp_${milestone}`)) {
+        shownMilestonesRef.current.add(`xp_${milestone}`);
         fireConfetti("xp_milestone");
+        
+        // Show achievement toast for XP milestones
+        if (milestone === 100) achievements.xp100();
+        else if (milestone === 500) achievements.xp500();
+        else if (milestone === 1000) achievements.xp1000();
+        else if (milestone === 5000) achievements.xp5000();
+        else {
+          showAchievementToast({
+            title: `${milestone.toLocaleString()} XP!`,
+            description: `You've earned ${milestone.toLocaleString()} total XP`,
+            xp: Math.floor(milestone / 100),
+            icon: "sparkles",
+            type: "milestone",
+          });
+        }
         break;
       }
     }
 
-    // Check level up
-    if (newLevel > oldLevel) {
-      setTimeout(() => fireConfetti("level_up"), 500);
+    // Check level up - show modal and achievement toast
+    if (newLevel > oldLevel && !shownMilestonesRef.current.has(`level_${newLevel}`)) {
+      shownMilestonesRef.current.add(`level_${newLevel}`);
+      
+      // Show level achievement toasts for milestone levels
+      if (newLevel === 5) setTimeout(() => achievements.level5(), 3500);
+      else if (newLevel === 10) setTimeout(() => achievements.level10(), 3500);
+      else if (newLevel === 25) setTimeout(() => achievements.level25(), 3500);
+      
+      setLevelUpData({
+        newLevel,
+        xpGained: newXP - oldXP,
+        totalXP: newXP,
+      });
+      setTimeout(() => setShowLevelUpModal(true), 300);
     }
   }, [fireConfetti]);
 
@@ -115,17 +215,28 @@ export const XpProvider = ({ children }) => {
   }, [user, xp, checkMilestones]);
 
   const awardXP = useCallback(
-    async (action, value = null) => {
+    async (action, value = null, useComboMultiplier = false) => {
       if (!user?.email) return;
 
       try {
+        // Apply combo multiplier if enabled
+        let finalValue = value;
+        let multiplier = 1;
+        
+        if (useComboMultiplier && combo >= 2) {
+          multiplier = getMultiplier(combo);
+          if (typeof value === "number") {
+            finalValue = value * multiplier;
+          }
+        }
+
         const res = await fetch("/api/gamification/stats", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             userId: user.email,
             action,
-            value,
+            value: finalValue,
           }),
         });
 
@@ -134,13 +245,13 @@ export const XpProvider = ({ children }) => {
         if (result.success) {
           // Refresh XP to show the update
           await getXp();
-          return result;
+          return { ...result, multiplier, originalValue: value, finalValue };
         }
       } catch (error) {
         console.error("Error awarding XP:", error);
       }
     },
-    [user, getXp]
+    [user, getXp, combo]
   );
 
   useEffect(() => {
@@ -153,7 +264,46 @@ export const XpProvider = ({ children }) => {
     }
   }, [user, getXp]);
 
-  return <xpContext.Provider value={{ getXp, awardXP, xp, level, show, changed, fireConfetti }}>{children}</xpContext.Provider>;
+  // Listen for test combo event
+  useEffect(() => {
+    const handleTestCombo = () => {
+      incrementCombo();
+    };
+    
+    window.addEventListener("testCombo", handleTestCombo);
+    return () => window.removeEventListener("testCombo", handleTestCombo);
+  }, [incrementCombo]);
+
+  return (
+    <xpContext.Provider value={{ 
+      getXp, 
+      awardXP, 
+      xp, 
+      level, 
+      show, 
+      changed, 
+      fireConfetti, 
+      showAchievementToast, 
+      achievements,
+      // Combo multiplier
+      combo,
+      incrementCombo,
+      resetCombo,
+      getCurrentMultiplier,
+      // Badge awarding
+      awardBadge,
+    }}>
+      {children}
+      <LevelUpModal
+        isOpen={showLevelUpModal}
+        onClose={() => setShowLevelUpModal(false)}
+        newLevel={levelUpData.newLevel}
+        xpGained={levelUpData.xpGained}
+        totalXP={levelUpData.totalXP}
+      />
+      <ComboMultiplier combo={combo} show={showCombo} />
+    </xpContext.Provider>
+  );
 };
 
 export default xpContext;

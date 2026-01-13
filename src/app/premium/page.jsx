@@ -28,6 +28,7 @@ import {
   Tag,
 } from "lucide-react";
 import { toast } from "sonner";
+import PremiumCelebration from "@/components/premium/PremiumCelebration";
 
 export default function PremiumPage() {
   const { user } = useAuth();
@@ -38,6 +39,7 @@ export default function PremiumPage() {
   const [loadingStatus, setLoadingStatus] = useState(true);
   const [couponCode, setCouponCode] = useState("");
   const [couponApplied, setCouponApplied] = useState(null);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -125,10 +127,14 @@ export default function PremiumPage() {
                 throw new Error("Payment verification failed");
               }
 
+              // Show celebration animation
+              setShowCelebration(true);
               toast.success("Premium activated successfully!");
+              
+              // Redirect after celebration
               setTimeout(() => {
                 router.push("/generate");
-              }, 2000);
+              }, 5000);
             } catch (error) {
               toast.error("Payment verification failed. Please contact support.");
               console.error("Verification error:", error);
@@ -250,6 +256,15 @@ export default function PremiumPage() {
 
   return (
     <div className="min-h-screen bg-background py-12 px-4">
+      {/* Premium Celebration Modal */}
+      <PremiumCelebration 
+        isOpen={showCelebration} 
+        onClose={() => {
+          setShowCelebration(false);
+          router.push("/generate");
+        }} 
+      />
+      
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-yellow-500 rounded-full mb-4">

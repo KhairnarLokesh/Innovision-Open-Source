@@ -16,6 +16,7 @@ import {
   Youtube,
   BookOpen,
   Crown,
+  MoonStar,
 } from "lucide-react";
 import { CgDetailsMore } from "react-icons/cg";
 import { Sun, Moon } from "lucide-react";
@@ -24,11 +25,13 @@ import GoogleTranslate from "../GoogleTranslate";
 import PremiumGoogleTranslate from "../PremiumGoogleTranslate";
 import { useContext } from "react";
 import xpContext from "@/contexts/xp";
+import { useNightMode } from "@/contexts/nightMode";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/auth";
 import Logout from "./Logout";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -37,6 +40,7 @@ const Navbar = () => {
   const [streak, setStreak] = useState(0);
   const [isPremium, setIsPremium] = useState(false);
   const { xp, show, changed } = useContext(xpContext);
+  const { nightMode, toggleNightMode } = useNightMode();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -378,9 +382,17 @@ const Navbar = () => {
                       )}
                     </Link>
                     <Button
+                      onClick={toggleNightMode}
+                      variant={"ghost"}
+                      className={`border-0 ml-1 hover:bg-slate-100/80 transition-all duration-200 ${nightMode ? 'text-amber-500' : ''}`}
+                      title={nightMode ? "Disable Night Mode" : "Enable Night Mode"}
+                    >
+                      <MoonStar className={`w-5 h-5 ${nightMode ? 'fill-amber-500' : ''}`} />
+                    </Button>
+                    <Button
                       onClick={toggleTheme}
                       variant={"ghost"}
-                      className="border-0 ml-2 hover:bg-slate-100/80 transition-all duration-200"
+                      className="border-0 ml-1 hover:bg-slate-100/80 transition-all duration-200"
                     >
                       {theme === "light" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
                     </Button>
@@ -389,9 +401,16 @@ const Navbar = () => {
                 ) : (
                   <div className="flex gap-2">
                     <Button
+                      onClick={toggleNightMode}
+                      variant={"ghost"}
+                      className={`border-0 hover:bg-slate-100/80 transition-all duration-200 ${nightMode ? 'text-amber-500' : ''}`}
+                    >
+                      <MoonStar className={`w-5 h-5 ${nightMode ? 'fill-amber-500' : ''}`} />
+                    </Button>
+                    <Button
                       onClick={toggleTheme}
                       variant={"ghost"}
-                      className="border-0 ml-2 hover:bg-slate-100/80 transition-all duration-200"
+                      className="border-0 hover:bg-slate-100/80 transition-all duration-200"
                     >
                       {theme === "light" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
                     </Button>
@@ -441,49 +460,84 @@ const Navbar = () => {
                   <span className="text-yellow-900 dark:text-yellow-400 font-bold max-sm:hidden">Premium</span>
                 </Link>
               )}
-              <div className="flex gap-2 items-center relative rounded-2xl border-2 px-4 py-2 border-green-500/50 bg-green-50/50 dark:bg-green-950/20">
-                <Sparkles className="h-4 w-4 text-green-500" />
-                <span className="text-green-900 dark:text-green-400 font-bold">
-                  {xp}
-                  {show && (
-                    <AnimatePresence>
-                      <motion.div
-                        initial={{
-                          opacity: 0,
-                          scale: 0.5,
-                          y: 10,
-                        }}
-                        animate={{
-                          opacity: 1,
-                          scale: 1,
-                          y: 0,
-                        }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{
-                          duration: 0.3,
-                          ease: "easeOut",
-                        }}
-                        className="absolute text-green-600 right-0 w-7"
-                      >
-                        <p>+{changed}</p>
-                      </motion.div>
-                    </AnimatePresence>
-                  )}
-                </span>
-              </div>
-              <div className="flex gap-2 items-center rounded-2xl border-2 px-4 py-2 border-orange-500/50 bg-orange-50/50 dark:bg-orange-950/20">
-                <Flame className={`h-4 w-4 ${streak >= 7 ? 'text-red-500 animate-pulse' : 'text-orange-500'}`} 
-                  style={{ 
-                    filter: streak >= 7 ? 'drop-shadow(0 0 4px rgba(239,68,68,0.6))' : 'none'
-                  }}
-                />
-                <span className={`font-bold ${streak >= 30 ? 'text-red-500' : streak >= 7 ? 'text-orange-500' : 'text-orange-600 dark:text-orange-400'}`}>
-                  {streak}
-                </span>
-              </div>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex gap-2 items-center relative rounded-2xl border-2 px-4 py-2 border-green-500/50 bg-green-50/50 dark:bg-green-950/20 cursor-help">
+                    <Sparkles className="h-4 w-4 text-green-500" />
+                    <span className="text-green-900 dark:text-green-400 font-bold">
+                      {xp}
+                      {show && (
+                        <AnimatePresence>
+                          <motion.div
+                            initial={{
+                              opacity: 0,
+                              scale: 0.5,
+                              y: 10,
+                            }}
+                            animate={{
+                              opacity: 1,
+                              scale: 1,
+                              y: 0,
+                            }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{
+                              duration: 0.3,
+                              ease: "easeOut",
+                            }}
+                            className="absolute text-green-600 right-0 w-7"
+                          >
+                            <p>+{changed}</p>
+                          </motion.div>
+                        </AnimatePresence>
+                      )}
+                    </span>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent variant="success" side="bottom">
+                  <div className="text-center">
+                    <p className="font-bold">Experience Points</p>
+                    <p className="text-xs opacity-90">Level {Math.floor(xp / 1000) + 1}</p>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex gap-2 items-center rounded-2xl border-2 px-4 py-2 border-orange-500/50 bg-orange-50/50 dark:bg-orange-950/20 cursor-help">
+                    <Flame className={`h-4 w-4 ${streak >= 7 ? 'text-red-500 animate-pulse' : 'text-orange-500'}`} 
+                      style={{ 
+                        filter: streak >= 7 ? 'drop-shadow(0 0 4px rgba(239,68,68,0.6))' : 'none'
+                      }}
+                    />
+                    <span className={`font-bold ${streak >= 30 ? 'text-red-500' : streak >= 7 ? 'text-orange-500' : 'text-orange-600 dark:text-orange-400'}`}>
+                      {streak}
+                    </span>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent variant="warning" side="bottom">
+                  <div className="text-center">
+                    <p className="font-bold">{streak} Day Streak!</p>
+                    <p className="text-xs opacity-90">Keep learning daily</p>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
             </>
           )}
           <div className="max-sm:hidden flex items-center gap-2">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={toggleNightMode}
+                  variant={"ghost"}
+                  className={`border-0 hover:bg-slate-100/80 transition-all duration-200 p-2 ${nightMode ? 'text-amber-500' : ''}`}
+                >
+                  <MoonStar className={`w-5 h-5 ${nightMode ? 'fill-amber-500 animate-night-pulse' : ''}`} />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>{nightMode ? "Disable" : "Enable"} Night Mode</p>
+                <p className="text-xs opacity-70">Blue light filter for eye comfort</p>
+              </TooltipContent>
+            </Tooltip>
             <Button
               onClick={toggleTheme}
               variant={"ghost"}

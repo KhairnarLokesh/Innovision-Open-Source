@@ -239,3 +239,354 @@ body {
 .animate-fire-flicker {
   animation: fire-flicker 0.5s ease-in-out infinite;
 }
+
+
+/* Progress Bar Animations */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.shimmer-effect {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes progress-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-progress-pulse {
+  animation: progress-pulse 2s ease-in-out infinite;
+}
+
+/* Striped progress bar */
+.bg-stripes {
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.15) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.15) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 1rem 1rem;
+  animation: stripes 1s linear infinite;
+}
+
+@keyframes stripes {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 1rem 0;
+  }
+}
+
+
+/* Bouncy Tooltip Animations */
+@keyframes bounce-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  50% {
+    transform: translateY(-3px) scale(1.02);
+  }
+  70% {
+    transform: translateY(1px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes bounce-in-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  50% {
+    transform: translateY(3px) scale(1.02);
+  }
+  70% {
+    transform: translateY(-1px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes bounce-in-left {
+  0% {
+    opacity: 0;
+    transform: translateX(10px) scale(0.95);
+  }
+  50% {
+    transform: translateX(-3px) scale(1.02);
+  }
+  70% {
+    transform: translateX(1px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes bounce-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(-10px) scale(0.95);
+  }
+  50% {
+    transform: translateX(3px) scale(1.02);
+  }
+  70% {
+    transform: translateX(-1px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.animate-bounce-in-up {
+  animation: bounce-in-up 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-bounce-in-down {
+  animation: bounce-in-down 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-bounce-in-left {
+  animation: bounce-in-left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-bounce-in-right {
+  animation: bounce-in-right 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+
+/* Achievement Toast Slide-in Animation */
+@keyframes slide-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(100%) scale(0.95);
+  }
+  60% {
+    transform: translateX(-10px) scale(1.02);
+  }
+  80% {
+    transform: translateX(5px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes slide-out-right {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+.animate-slide-out-right {
+  animation: slide-out-right 0.3s ease-in forwards;
+}
+
+/* Achievement glow effect */
+@keyframes achievement-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+  }
+}
+
+.animate-achievement-glow {
+  animation: achievement-glow 2s ease-in-out infinite;
+}
+
+
+/* Combo Multiplier Animations */
+@keyframes combo-popup {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(20px);
+  }
+  20% {
+    opacity: 1;
+    transform: scale(1.2) translateY(-10px);
+  }
+  40% {
+    transform: scale(0.95) translateY(0);
+  }
+  60% {
+    transform: scale(1.05) translateY(-5px);
+  }
+  80%, 100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-combo-popup {
+  animation: combo-popup 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes combo-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 currentColor;
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px 5px currentColor;
+  }
+}
+
+.animate-combo-pulse {
+  animation: combo-pulse 0.8s ease-in-out infinite;
+}
+
+@keyframes combo-particle {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-60px) scale(0);
+  }
+}
+
+.animate-combo-particle {
+  animation: combo-particle 1s ease-out forwards;
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
+
+
+/* 3D Card Flip for Badge Gallery */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Copy button checkmark animation */
+@keyframes scale-check {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-scale-check {
+  animation: scale-check 0.3s ease-out forwards;
+}
+
+
+/* Night Mode - Blue Light Filter */
+.night-mode {
+  filter: sepia(15%) saturate(85%) brightness(95%);
+}
+
+/* Exclude certain elements from night mode filter */
+.night-mode .exclude-night-filter {
+  filter: none;
+}
+
+/* Extra dark backgrounds for night mode */
+.night-mode.dark body,
+.night-mode.dark .bg-background {
+  background-color: #080808 !important;
+}
+
+.night-mode.dark .bg-card {
+  background-color: #0c0c0c !important;
+}
+
+.night-mode.dark .bg-muted {
+  background-color: #141414 !important;
+}
+
+/* Warmer text colors in night mode */
+.night-mode .text-muted-foreground {
+  color: #b0a090 !important;
+}
+
+/* Softer borders */
+.night-mode .border {
+  border-color: #1a1a1a !important;
+}
+
+/* Night mode indicator animation */
+@keyframes night-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-night-pulse {
+  animation: night-pulse 2s ease-in-out infinite;
+}

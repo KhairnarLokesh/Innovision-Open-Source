@@ -5,17 +5,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { CheckCircle, XCircle, Loader } from "lucide-react";
+import { CheckCircle, XCircle, Loader, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { useContext } from "react";
 import xpContext from "@/contexts/xp";
+import { ComboIndicator } from "@/components/gamification/ComboMultiplier";
 
 export default function Quiz({ task, roadmapId, chapterNumber }) {
   const [selectedOption, setSelectedOption] = useState("");
   const [isAnswered, setIsAnswered] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const { getXp, awardXP } = useContext(xpContext);
+  const { getXp, awardXP, combo, incrementCombo, resetCombo, getCurrentMultiplier } = useContext(xpContext);
+  
   const handleOptionSelect = (value) => {
     if (isAnswered) return;
     setSelectedOption(value);
@@ -23,7 +25,7 @@ export default function Quiz({ task, roadmapId, chapterNumber }) {
 
   const checkAnswer = async () => {
     setSubmitting(true);
-    const isCorrect = selectedOption === task.answer;
+    const correct = selectedOption === task.answer;
     const res = await fetch(`/api/tasks`, {
       method: "POST",
       headers: {
@@ -31,15 +33,31 @@ export default function Quiz({ task, roadmapId, chapterNumber }) {
       },
       body: JSON.stringify({
         task,
-        isCorrect,
+        isCorrect: correct,
         roadmap: roadmapId,
         chapter: chapterNumber,
         userAnswer: selectedOption,
       }),
     });
     if (res.ok) {
-      setIsCorrect(isCorrect);
+      setIsCorrect(correct);
       setIsAnswered(true);
+
+      // Handle combo system
+      if (correct) {
+        incrementCombo();
+        // Show toast for combo XP after a small delay so combo updates first
+        setTimeout(() => {
+          const multiplier = getCurrentMultiplier();
+          if (multiplier > 1) {
+            toast.success(`+${2 * multiplier} XP (${multiplier}x combo!)`, {
+              icon: <Zap className="h-4 w-4 text-yellow-500" />,
+            });
+          }
+        }, 100);
+      } else {
+        resetCombo();
+      }
 
       // XP is now awarded server-side in /api/tasks
       getXp();
@@ -63,6 +81,8 @@ export default function Quiz({ task, roadmapId, chapterNumber }) {
         <CardHeader className="rounded-t-lg">
           <div className="flex justify-between items-center">
             <CardTitle className="text-xl font-semibold">Multiple choice question</CardTitle>
+            {/* Show combo indicator if active */}
+            {combo >= 2 && <ComboIndicator combo={combo} />}
           </div>
         </CardHeader>
 

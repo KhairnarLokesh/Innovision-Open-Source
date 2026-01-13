@@ -5,7 +5,9 @@ import { Toaster } from "@/components/ui/sonner";
 import LoaderProvider from "@/components/ui/Custom/ToastLoader";
 import { AuthProvider } from "@/contexts/auth";
 import { XpProvider } from "@/contexts/xp";
+import { NightModeProvider } from "@/contexts/nightMode";
 import OfflineIndicator from "@/components/OfflineIndicator";
+import NotificationChecker from "@/components/NotificationChecker";
 
 const robotoSans = Roboto({
   variable: "--font-roboto-sans",
@@ -30,12 +32,15 @@ export default function RootLayout({ children }) {
       <body className={`${robotoSans.variable} ${robotoMono.variable} antialiased`}>
         <AuthProvider>
           <XpProvider>
-            <LoaderProvider>
-              <Navbar />
-              <main className="pt-16 relative">{children}</main>
-              <OfflineIndicator />
-              <Toaster richColors />
-            </LoaderProvider>
+            <NightModeProvider>
+              <LoaderProvider>
+                <Navbar />
+                <main className="pt-16 relative">{children}</main>
+                <OfflineIndicator />
+                <NotificationChecker />
+                <Toaster richColors />
+              </LoaderProvider>
+            </NightModeProvider>
           </XpProvider>
         </AuthProvider>
       </body>

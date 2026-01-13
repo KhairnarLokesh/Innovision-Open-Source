@@ -4,17 +4,23 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/auth";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Trophy, TrendingUp, BookOpen, Calendar } from "lucide-react";
+import { Trophy, TrendingUp, BookOpen, Calendar, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Sidebar from "@/components/dashboard/Sidebar";
 import { ProblemSolvedChart } from "@/components/ui/problem-sloved-chart";
 import { RecentCourses } from "@/components/ui/recent-submissions";
 import GamificationDashboard from "@/components/gamification/GamificationDashboard";
+import MotivationalQuote from "@/components/dashboard/MotivationalQuote";
 import XPChart from "@/components/gamification/XPChart";
 import StreakCalendar from "@/components/gamification/StreakCalendar";
 import DailyChallenges from "@/components/gamification/DailyChallenges";
+import DailyQuests from "@/components/gamification/DailyQuests";
 import SkillTree from "@/components/gamification/SkillTree";
 import Leaderboard from "@/components/gamification/Leaderboard";
+import BadgeGallery from "@/components/profile/BadgeGallery";
+import Bookmarks from "@/components/profile/Bookmarks";
+import StatsCard from "@/components/profile/StatsCard";
+import StudyReminders from "@/components/settings/StudyReminders";
 import { Download, Database, Shield, FileText, Crown, Lock } from "lucide-react";
 import TrialBanner from "@/components/TrialBanner";
 import PremiumDialog from "@/components/PremiumDialog";
@@ -141,7 +147,7 @@ export default function ProfilePage() {
           {/* Main Content - All original tabs */}
           <div className="space-y-6">
             <Tabs defaultValue="overview" className="space-y-4">
-              <TabsList className="grid w-full grid-cols-6">
+              <TabsList className="grid w-full grid-cols-7">
                 <TabsTrigger value="overview">
                   <Trophy className="h-4 w-4 mr-2" />
                   Overview
@@ -166,11 +172,36 @@ export default function ProfilePage() {
                   <Database className="h-4 w-4 mr-2" />
                   Research
                 </TabsTrigger>
+                <TabsTrigger value="settings">
+                  <Settings className="h-4 w-4 mr-2" />
+                  Settings
+                </TabsTrigger>
               </TabsList>
 
               {/* Overview Tab - Gamification Dashboard */}
               <TabsContent value="overview" className="space-y-4">
-                {user?.email && <GamificationDashboard userId={user.email} />}
+                <LockedFeature featureName="Overview Dashboard" hasAccess={hasAccess} showPreview={true}>
+                  {/* Motivational Quote */}
+                  <MotivationalQuote />
+                  
+                  {/* Learning Stats Dashboard */}
+                  {user?.email && <StatsCard userId={user.email} />}
+                  
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    <div className="lg:col-span-2">
+                      {user?.email && <GamificationDashboard userId={user.email} />}
+                    </div>
+                    <div className="lg:col-span-1">
+                      {user?.email && <DailyQuests userId={user.email} />}
+                    </div>
+                  </div>
+                  
+                  {/* Badge Collection Gallery */}
+                  <BadgeGallery 
+                    earnedBadges={userData?.badges || []} 
+                    userName={userData?.name || user?.displayName || "User"} 
+                  />
+                </LockedFeature>
               </TabsContent>
 
               {/* Progress Tab - XP Chart */}
@@ -192,6 +223,9 @@ export default function ProfilePage() {
 
               {/* Courses Tab */}
               <TabsContent value="courses" className="space-y-4">
+                {/* Bookmarks Section */}
+                <Bookmarks />
+                
                 <Card>
                   <CardHeader>
                     <CardTitle>Recent Courses</CardTitle>
@@ -334,6 +368,13 @@ export default function ProfilePage() {
                     </ul>
                   </CardContent>
                 </Card>
+                </LockedFeature>
+              </TabsContent>
+
+              {/* Settings Tab */}
+              <TabsContent value="settings" className="space-y-4">
+                <LockedFeature featureName="Settings & Reminders" hasAccess={hasAccess} showPreview={true}>
+                  <StudyReminders />
                 </LockedFeature>
               </TabsContent>
             </Tabs>

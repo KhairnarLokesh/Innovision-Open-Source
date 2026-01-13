@@ -175,21 +175,61 @@ export async function POST(request) {
 
 function checkBadges(stats, action) {
   const badges = [];
+  const currentBadges = stats.badges || [];
 
-  if (action === "complete_course" && !stats.badges.includes("first_course")) {
+  // First course completion
+  if (action === "complete_course" && !currentBadges.includes("first_course")) {
     badges.push("first_course");
   }
 
-  if (stats.streak >= 7 && !stats.badges.includes("week_streak")) {
-    badges.push("week_streak");
-  }
-
-  if (action === "perfect_quiz" && !stats.badges.includes("perfect_score")) {
+  // Perfect quiz score
+  if (action === "perfect_quiz" && !currentBadges.includes("perfect_score")) {
     badges.push("perfect_score");
   }
 
-  if (stats.level >= 10 && !stats.badges.includes("master")) {
+  // 7-day streak
+  if (stats.streak >= 7 && !currentBadges.includes("week_streak")) {
+    badges.push("week_streak");
+  }
+
+  // 30-day streak
+  if (stats.streak >= 30 && !currentBadges.includes("month_streak")) {
+    badges.push("month_streak");
+  }
+
+  // Level 10 - Master
+  if (stats.level >= 10 && !currentBadges.includes("master")) {
     badges.push("master");
+  }
+
+  // Level 50 - Legend
+  if (stats.level >= 50 && !currentBadges.includes("legend")) {
+    badges.push("legend");
+  }
+
+  // Night Owl - studying between 12 AM - 4 AM
+  const hour = new Date().getHours();
+  if (hour >= 0 && hour < 4 && !currentBadges.includes("night_owl")) {
+    badges.push("night_owl");
+  }
+
+  // Early Bird - studying between 4 AM - 6 AM
+  if (hour >= 4 && hour < 6 && !currentBadges.includes("early_bird")) {
+    badges.push("early_bird");
+  }
+
+  // Scholar - 10 courses completed (check achievements count)
+  const coursesCompleted = (stats.achievements || []).filter(a => a.title === "Course Mastered!").length;
+  if (coursesCompleted >= 10 && !currentBadges.includes("scholar")) {
+    badges.push("scholar");
+  }
+
+  // Bookworm - 100 lessons completed
+  const lessonsCompleted = (stats.achievements || []).filter(a => 
+    a.title === "Lesson Complete!" || a.title === "Chapter Complete!"
+  ).length;
+  if (lessonsCompleted >= 100 && !currentBadges.includes("bookworm")) {
+    badges.push("bookworm");
   }
 
   return badges;

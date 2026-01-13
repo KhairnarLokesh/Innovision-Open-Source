@@ -1,16 +1,56 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock } from "lucide-react";
 import Sidebar from "../sidebar/page";
 import { Button } from "../ui/button";
+import { AnimatedProgress } from "../ui/animated-progress";
 import TaskDecider from "../Tasks/TaskDecider";
 import Content from "./Content";
 import ChapterNotFound from "./ChapterNotFound";
 import ChapterError from "./ChapterError";
 import ChapterLoading from "./ChapterLoading";
+import BookmarkButton from "./BookmarkButton";
 import { toast } from "sonner";
 import { loader } from "../ui/Custom/ToastLoader";
+
+// Calculate reading time based on word count (200 words per minute average)
+const calculateReadingTime = (content) => {
+    if (!content) return 0;
+    
+    // Handle different content types
+    let text = "";
+    if (typeof content === "string") {
+        text = content;
+    } else if (typeof content === "object") {
+        // Extract text from subtopics
+        if (content.subtopics) {
+            text = content.subtopics.map(topic => {
+                const title = topic.title || "";
+                const topicContent = topic.content || "";
+                return `${title} ${topicContent}`;
+            }).join(" ");
+        }
+        if (content.chapterTitle) {
+            text += " " + content.chapterTitle;
+        }
+    }
+    
+    // Remove HTML tags and extra whitespace
+    const cleanText = text.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+    const wordCount = cleanText.split(" ").filter(word => word.length > 0).length;
+    
+    // Calculate minutes (200 words per minute)
+    const minutes = Math.ceil(wordCount / 200);
+    return Math.max(1, minutes); // Minimum 1 minute
+};
+
+// Format reading time display
+const formatReadingTime = (minutes) => {
+    if (minutes < 1) return "< 1 min read";
+    if (minutes === 1) return "1 min read";
+    return `${minutes} min read`;
+};
 
 const Page = ({ chapter, roadmapId }) => {
     const searchParams = useSearchParams();
@@ -304,9 +344,38 @@ const Page = ({ chapter, roadmapId }) => {
                 <Sidebar roadmap={roadmap} id={roadmapId} />
                 <div className="flex-1 p-8 lg:ml-96 lg:w-[60vw] max-sm:p-4 bg-background ">
                     {chapterData.chapterTitle && (
-                        <h1 className="text-4xl font-bold mb-4">
-                            {chapterData.chapterTitle}
-                        </h1>
+                        <div className="mb-4">
+                            <div className="flex items-start justify-between gap-4">
+                                <h1 className="text-4xl font-bold">
+                                    {chapterData.chapterTitle}
+                                </h1>
+                                <BookmarkButton
+                                    roadmapId={roadmapId}
+                                    chapterNumber={chapter}
+                                    chapterTitle={chapterData.chapterTitle}
+                                    roadmapTitle={roadmap?.title}
+                                    size="lg"
+                                />
+                            </div>
+                            <div className="flex items-center gap-2 mt-2 text-muted-foreground">
+                                <Clock className="h-4 w-4" />
+                                <span className="text-sm">
+                                    {formatReadingTime(calculateReadingTime(chapterData))}
+                                </span>
+                                <span className="text-sm">•</span>
+                                <span className="text-sm">
+                                    {subtopics.length} topics
+                                </span>
+                                {tasks.length > 0 && (
+                                    <>
+                                        <span className="text-sm">•</span>
+                                        <span className="text-sm">
+                                            {tasks.length} {tasks.length === 1 ? "task" : "tasks"}
+                                        </span>
+                                    </>
+                                )}
+                            </div>
+                        </div>
                     )}
 
                     {selectedIndex < chapterData.subtopics.length ? (
@@ -325,18 +394,12 @@ const Page = ({ chapter, roadmapId }) => {
                                     % complete
                                 </span>
                             </div>
-                            <div className="w-full bg-gray-200 rounded-full h-2">
-                                <div
-                                    className="bg-blue-600 h-2 rounded-full"
-                                    style={{
-                                        width: `${
-                                            ((selectedIndex + 1) /
-                                                subtopics.length) *
-                                            100
-                                        }%`,
-                                    }}
-                                ></div>
-                            </div>
+                            <AnimatedProgress 
+                                value={((selectedIndex + 1) / subtopics.length) * 100}
+                                color="blue"
+                                size="default"
+                                delay={200}
+                            />
                         </div>
                     ) : (
                         <div className="mb-6">
@@ -356,20 +419,12 @@ const Page = ({ chapter, roadmapId }) => {
                                     % complete
                                 </span>
                             </div>
-                            <div className="w-full bg-gray-200 rounded-full h-2">
-                                <div
-                                    className="bg-blue-600 h-2 rounded-full"
-                                    style={{
-                                        width: `${
-                                            ((selectedIndex -
-                                                subtopics.length +
-                                                1) /
-                                                tasks.length) *
-                                            100
-                                        }%`,
-                                    }}
-                                ></div>
-                            </div>
+                            <AnimatedProgress 
+                                value={((selectedIndex - subtopics.length + 1) / tasks.length) * 100}
+                                color="green"
+                                size="default"
+                                delay={200}
+                            />
                         </div>
                     )}
                     {selectedIndex < subtopics.length ? (
