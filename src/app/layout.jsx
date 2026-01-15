@@ -8,6 +8,7 @@ import { XpProvider } from "@/contexts/xp";
 import { NightModeProvider } from "@/contexts/nightMode";
 import OfflineIndicator from "@/components/OfflineIndicator";
 import NotificationChecker from "@/components/NotificationChecker";
+import { Analytics } from "@vercel/analytics/next";
 
 const robotoSans = Roboto({
   variable: "--font-roboto-sans",
@@ -74,6 +75,7 @@ export default function RootLayout({ children }) {
             </NightModeProvider>
           </XpProvider>
         </AuthProvider>
+        <Analytics />
       </body>
     </html>
   );
