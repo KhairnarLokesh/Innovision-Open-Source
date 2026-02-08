@@ -26,7 +26,7 @@ export default function Sidebar({ roadmap, id, isStudioCourse, courseId }) {
     const navigateToSubtopic = (chapterIndex, subtopicIndex) => {
         setActiveChapter(chapterIndex);
         setActiveSubtopic(subtopicIndex);
-        
+
         if (isStudioCourse) {
             router.push(`/studio-course/${courseId}/${chapterIndex + 1}`);
         } else {
@@ -78,11 +78,10 @@ export default function Sidebar({ roadmap, id, isStudioCourse, courseId }) {
                 className={`
         fixed top-16 left-0 z-40 h-screen border-r border-border
         transition-all duration-200 pb-24 ease-in-out shrink-0 custom-scroll
-        ${
-            isMobileSidebarOpen
-                ? "translate-x-0"
-                : "-translate-x-full lg:translate-x-0"
-        }
+        ${isMobileSidebarOpen
+                        ? "translate-x-0"
+                        : "-translate-x-full lg:translate-x-0"
+                    }
         w-[95vw] max-w-lg lg:w-96 p-6 bg-card overflow-y-scroll
       `}
             >
@@ -130,9 +129,9 @@ export default function Sidebar({ roadmap, id, isStudioCourse, courseId }) {
                                         className={cn(
                                             "w-full flex items-center justify-between p-3 text-left bg-zinc-50 dark:bg-zinc-900/80 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition",
                                             expandedChapters[chapterIndex] &&
-                                                "rounded-b-none",
+                                            "rounded-b-none",
                                             activeChapter === chapterIndex &&
-                                                "bg-blue-50 hover:bg-blue-100 dark:hover:bg-blue-900/50 dark:bg-blue-950/60"
+                                            "bg-blue-50 hover:bg-blue-100 dark:hover:bg-blue-900/50 dark:bg-blue-950/60"
                                         )}
                                         aria-expanded={
                                             expandedChapters[chapterIndex]
@@ -163,9 +162,9 @@ export default function Sidebar({ roadmap, id, isStudioCourse, courseId }) {
                                                 (content, subtopicIndex) => {
                                                     const isActive =
                                                         activeChapter ===
-                                                            chapterIndex &&
+                                                        chapterIndex &&
                                                         activeSubtopic ===
-                                                            subtopicIndex;
+                                                        subtopicIndex;
 
                                                     return (
                                                         <button
@@ -179,20 +178,18 @@ export default function Sidebar({ roadmap, id, isStudioCourse, courseId }) {
                                                             className={`
                               group flex items-center w-full px-3 py-2 cursor-pointer rounded-md text-sm
                               transition-colors duration-150 ease-in-out
-                              ${
-                                  isActive
-                                      ? "bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
-                                      : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-700/50"
-                              }
+                              ${isActive
+                                                                    ? "bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
+                                                                    : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-700/50"
+                                                                }
                             `}
                                                         >
                                                             <ChevronRight
                                                                 size={14}
-                                                                className={`mr-2 ${
-                                                                    isActive
+                                                                className={`mr-2 ${isActive
                                                                         ? "text-blue-500 dark:text-blue-400"
                                                                         : "text-zinc-400"
-                                                                }`}
+                                                                    }`}
                                                             />
                                                             <span className="truncate">
                                                                 {

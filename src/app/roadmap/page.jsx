@@ -28,16 +28,16 @@ export default function page() {
         <div className="min-h-screen bg-background relative">
             <PageBackground variant="courses" />
             <GridPattern opacity={0.02} />
-            
+
             <div className="max-w-6xl flex flex-col gap-4 items-center p-4 mb-16 mx-auto relative z-10">
-                <PageHeader 
-                    title="Your Courses" 
+                <PageHeader
+                    title="Your Courses"
                     description="Manage and continue your learning journey"
                     icon={BookOpen}
                     iconColor="text-blue-500"
                     badge={<><Sparkles className="h-3.5 w-3.5" /> My Learning</>}
                 />
-                
+
                 <div className="flex gap-6 justify-center flex-wrap w-full">
                     {loading ? (
                         Array(6)
@@ -53,12 +53,12 @@ export default function page() {
                     ) : (
                         <>
                             {roadmaps?.map((roadmap, index) => {
-                                
+
                                 if (roadmap.process === "completed") return (
                                     <ScrollReveal key={roadmap.id} delay={index * 80}>
                                         <HoverCard>
                                             <Card
-                                                className={"w-[320px] h-[200px] relative bg-card/50 backdrop-blur-sm border-border/50 flex flex-col"}
+                                                className={"w-[320px] h-50 relative bg-card/50 backdrop-blur-sm border-border/50 flex flex-col"}
                                             >
                                                 <CardHeader className="pb-2">
                                                     <CardTitle className="line-clamp-2">
@@ -92,7 +92,7 @@ export default function page() {
                                 <HoverCard>
                                     <Card
                                         className={
-                                            "w-[320px] h-[200px] relative flex items-center justify-center border-2 border-dashed border-border/50 bg-card/30 backdrop-blur-sm hover:border-blue-500/50 transition-colors"
+                                            "w-[320px] h-50 relative flex items-center justify-center border-2 border-dashed border-border/50 bg-card/30 backdrop-blur-sm hover:border-blue-500/50 transition-colors"
                                         }
                                     >
                                         <div className="flex flex-col items-center text-muted-foreground">

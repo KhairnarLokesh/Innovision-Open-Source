@@ -24,7 +24,7 @@ export default function YouTubeCourse() {
           const res = await fetch("/api/premium/status");
           const data = await res.json();
           setPremiumStatus(data);
-          
+
           // Also fetch YouTube course count
           const ytRes = await fetch("/api/youtube/status");
           if (ytRes.ok) {
@@ -63,7 +63,7 @@ export default function YouTubeCourse() {
         body: JSON.stringify({ url: youtubeUrl })
       });
       const videoInfo = await infoResponse.json();
-      
+
       setProgress("Extracting transcript...");
 
       // Step 2: Get transcript
@@ -87,25 +87,25 @@ Generate a structured course with chapters covering all the topics discussed in 
       const courseResponse = await fetch("/api/user_prompt", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           prompt,
           difficulty: "balanced"
         })
       });
-      
+
       const courseData = await courseResponse.json();
-      
+
       if (!courseData.id) {
         throw new Error("Failed to generate course");
       }
 
       // Poll for completion
       setProgress("Processing course content...");
-      
+
       const checkStatus = async () => {
         const statusRes = await fetch(`/api/roadmap/${courseData.id}`);
         const status = await statusRes.json();
-        
+
         if (status.process === "completed") {
           toast.success("Course generated successfully!");
           router.push(`/roadmap/${courseData.id}`);
@@ -115,7 +115,7 @@ Generate a structured course with chapters covering all the topics discussed in 
           setTimeout(checkStatus, 2000);
         }
       };
-      
+
       checkStatus();
     } catch (error) {
       console.error(error);
@@ -128,10 +128,10 @@ Generate a structured course with chapters covering all the topics discussed in 
     <div className="min-h-screen bg-background p-6 relative">
       <PageBackground />
       <GridPattern opacity={0.02} />
-      
+
       <div className="max-w-4xl mx-auto relative z-10">
-        <PageHeader 
-          title="YouTube to Course Generator" 
+        <PageHeader
+          title="YouTube to Course Generator"
           description="Convert any YouTube video into a structured learning course"
           icon={PlaySquare}
           iconColor="text-red-500"
@@ -140,9 +140,9 @@ Generate a structured course with chapters covering all the topics discussed in 
 
         {!premiumStatus.isPremium && (
           <ScrollReveal delay={100}>
-            <div className="mb-6 p-4 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-xl backdrop-blur-sm">
+            <div className="mb-6 p-4 bg-linear-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-xl backdrop-blur-sm">
               <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg shadow-yellow-500/25">
+                <div className="shrink-0 w-10 h-10 bg-linear-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg shadow-yellow-500/25">
                   <Crown className="h-5 w-5 text-black" />
                 </div>
                 <div className="flex-1">
@@ -152,7 +152,7 @@ Generate a structured course with chapters covering all the topics discussed in 
                   </p>
                   <Button
                     onClick={() => router.push("/premium")}
-                    className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black transition-all duration-300 hover:scale-105"
+                    className="bg-linear-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black transition-all duration-300 hover:scale-105"
                   >
                     Upgrade to Premium - ₹100/month
                   </Button>
@@ -185,10 +185,10 @@ Generate a structured course with chapters covering all the topics discussed in 
                     disabled={isProcessing}
                     className="bg-background/50"
                   />
-                  <Button 
+                  <Button
                     onClick={generateCourse}
                     disabled={isProcessing}
-                    className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 transition-all duration-300"
+                    className="bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 transition-all duration-300"
                   >
                     {isProcessing ? (
                       <>

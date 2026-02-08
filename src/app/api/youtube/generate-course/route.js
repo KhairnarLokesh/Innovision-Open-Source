@@ -90,14 +90,14 @@ Return as JSON matching this structure:
           let stats = statsDoc.exists
             ? statsDoc.data()
             : {
-                xp: 0,
-                level: 1,
-                streak: 1,
-                badges: [],
-                rank: 0,
-                achievements: [],
-                lastActive: new Date().toISOString(),
-              };
+              xp: 0,
+              level: 1,
+              streak: 1,
+              badges: [],
+              rank: 0,
+              achievements: [],
+              lastActive: new Date().toISOString(),
+            };
 
           const newXP = (stats.xp || 0) + xpGained;
           const newLevel = Math.floor(newXP / 500) + 1;

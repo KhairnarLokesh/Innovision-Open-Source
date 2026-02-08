@@ -53,7 +53,7 @@ const Page = () => {
     return (
       <div className="relative text-center">
         <Loading />
-        <p className="absolute z-[5] top-1/2 left-1/2 translate-y-1/2 -translate-x-1/2">{text}</p>
+        <p className="absolute z-5 top-1/2 left-1/2 translate-y-1/2 -translate-x-1/2">{text}</p>
       </div>
     );
   }
@@ -62,7 +62,7 @@ const Page = () => {
     return (
       <div className="relative text-center">
         <Loading />
-        <p className="absolute z-[5] top-1/2 left-1/2 translate-y-1/2 -translate-x-1/2">{text}</p>
+        <p className="absolute z-5 top-1/2 left-1/2 translate-y-1/2 -translate-x-1/2">{text}</p>
       </div>
     );
   }

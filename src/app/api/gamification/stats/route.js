@@ -225,7 +225,7 @@ function checkBadges(stats, action) {
   }
 
   // Bookworm - 100 lessons completed
-  const lessonsCompleted = (stats.achievements || []).filter(a => 
+  const lessonsCompleted = (stats.achievements || []).filter(a =>
     a.title === "Lesson Complete!" || a.title === "Chapter Complete!"
   ).length;
   if (lessonsCompleted >= 100 && !currentBadges.includes("bookworm")) {

@@ -11,7 +11,7 @@ const Page = () => {
     <div className="min-h-screen bg-background relative">
       <PageBackground />
       <GridPattern opacity={0.02} />
-      
+
       <div className="max-w-5xl mx-auto pt-4 w-[95vw] relative z-10">
         <ScrollReveal>
           <div className="relative mb-6">
@@ -19,7 +19,7 @@ const Page = () => {
               <ChevronLeft className="h-5 w-5" />
             </Link>
             <div className="text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full mb-3 shadow-lg shadow-blue-500/25">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-linear-to-br from-blue-500 to-cyan-500 rounded-full mb-3 shadow-lg shadow-blue-500/25">
                 <Play className="h-6 w-6 text-white" />
               </div>
               <h1 className="text-3xl font-bold">Demo</h1>

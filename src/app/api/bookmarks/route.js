@@ -65,8 +65,8 @@ export async function POST(request) {
 
     await userRef.set({ bookmarks }, { merge: true });
 
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       bookmarks,
       isBookmarked: action !== "remove"
     });

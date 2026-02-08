@@ -105,13 +105,12 @@ const FillUps = ({ task, roadmapId, chapterNumber }) => {
                   value={userAnswer}
                   onChange={handleInputChange}
                   disabled={isAnswered}
-                  className={`text-center mx-2 max-w-24 font-medium ${
-                    isAnswered
-                      ? isCorrect
-                        ? "border-green-500 bg-green-50 dark:bg-green-950/30 text-green-700 dark:text-green-400"
-                        : "border-red-500 bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-400"
-                      : "border-blue-300 focus:border-blue-500"
-                  }`}
+                  className={`text-center mx-2 max-w-24 font-medium ${isAnswered
+                    ? isCorrect
+                      ? "border-green-500 bg-green-50 dark:bg-green-950/30 text-green-700 dark:text-green-400"
+                      : "border-red-500 bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-400"
+                    : "border-blue-300 focus:border-blue-500"
+                    }`}
                   placeholder="Answer"
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && userAnswer.trim() !== "") {
@@ -125,7 +124,7 @@ const FillUps = ({ task, roadmapId, chapterNumber }) => {
             {isAnswered && (
               <div>
                 <div className="flex items-center mt-4">
-                  <div className="flex-shrink-0 mr-3">
+                  <div className="shrink-0 mr-3">
                     {isCorrect ? (
                       <CheckCircle className="h-6 w-6 text-green-500" />
                     ) : (
@@ -141,11 +140,10 @@ const FillUps = ({ task, roadmapId, chapterNumber }) => {
                 </div>
                 <div className="mt-6 space-y-4 animate-fadeIn">
                   <div
-                    className={`p-4 rounded-lg border-l-4 ${
-                      isCorrect
-                        ? "bg-green-50 dark:bg-green-950/30 border-green-500 text-green-700 dark:text-green-400"
-                        : "bg-red-50 dark:bg-red-950/30 border-red-500 text-red-700 dark:text-red-400"
-                    }`}
+                    className={`p-4 rounded-lg border-l-4 ${isCorrect
+                      ? "bg-green-50 dark:bg-green-950/30 border-green-500 text-green-700 dark:text-green-400"
+                      : "bg-red-50 dark:bg-red-950/30 border-red-500 text-red-700 dark:text-red-400"
+                      }`}
                   >
                     <div className="font-bold text-lg mb-1">Explanation</div>
                     <p>{task.explanation}</p>

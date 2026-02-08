@@ -161,7 +161,7 @@ const Navbar = () => {
         {/* Logo - Left */}
         <Link
           href={user ? `/roadmap` : "/"}
-          className="flex items-center gap-1.5 sm:gap-2 hover:opacity-80 transition-opacity flex-shrink-0"
+          className="flex items-center gap-1.5 sm:gap-2 hover:opacity-80 transition-opacity shrink-0"
         >
           <Image src="/InnoVision_LOGO-removebg-preview.png" alt="logo" width={28} height={28} className="sm:w-8 sm:h-8" />
           <span className="text-sm sm:text-base font-light text-foreground">InnoVision</span>
@@ -220,7 +220,7 @@ const Navbar = () => {
         </nav>
 
         {/* Right Section */}
-        <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
           {user && (
             <>
               {/* Premium Badge */}
@@ -306,7 +306,7 @@ const Navbar = () => {
                   <Link href="/profile" className="relative hidden sm:block">
                     <Avatar className="h-8 w-8 sm:h-9 sm:w-9 ring-2 ring-transparent hover:ring-blue-500/50 transition-all cursor-pointer">
                       <AvatarImage src={user?.image || "/default-avatar.png"} alt={user?.name} />
-                      <AvatarFallback className="bg-gradient-to-br from-blue-500 to-cyan-500 text-white text-sm font-light">
+                      <AvatarFallback className="bg-linear-to-br from-blue-500 to-cyan-500 text-white text-sm font-light">
                         {user?.name?.[0]?.toUpperCase() || "U"}
                       </AvatarFallback>
                     </Avatar>
@@ -337,14 +337,14 @@ const Navbar = () => {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator className="bg-border" />
-                  
+
                   <DropdownMenuItem asChild>
                     <Link href="/profile" className="flex items-center gap-2">
                       <User className="h-4 w-4" />
                       Profile
                     </Link>
                   </DropdownMenuItem>
-                  
+
                   <DropdownMenuItem asChild>
                     <Link href="/gamification" className="flex items-center gap-2">
                       <Trophy className="h-4 w-4" />
@@ -367,71 +367,71 @@ const Navbar = () => {
                   <div className="sm:hidden px-2 py-1.5 space-y-1">
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">XP</span>
-                    <span className="font-medium text-green-600">{xp}</span>
+                      <span className="font-medium text-green-600">{xp}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">Streak</span>
+                      <span className="font-medium text-orange-600">{streak} days</span>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Streak</span>
-                    <span className="font-medium text-orange-600">{streak} days</span>
+                  <DropdownMenuSeparator className="sm:hidden" />
+
+                  <div className="px-2 py-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Night Mode</span>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={toggleNightMode}
+                        className={`h-8 w-8 p-0 ${nightMode ? 'text-amber-500' : ''}`}
+                      >
+                        <MoonStar className={`h-4 w-4 ${nightMode ? 'fill-amber-500' : ''}`} />
+                      </Button>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Theme</span>
+                      <Button variant="ghost" size="sm" onClick={toggleTheme} className="h-8 w-8 p-0">
+                        {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+                      </Button>
+                    </div>
                   </div>
-                </div>
-                <DropdownMenuSeparator className="sm:hidden" />
 
-                <div className="px-2 py-1.5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">Night Mode</span>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={toggleNightMode}
-                      className={`h-8 w-8 p-0 ${nightMode ? 'text-amber-500' : ''}`}
-                    >
-                      <MoonStar className={`h-4 w-4 ${nightMode ? 'fill-amber-500' : ''}`} />
-                    </Button>
+                  <DropdownMenuSeparator />
+
+                  <div className="px-2 py-1.5">
+                    <p className="text-xs text-muted-foreground mb-1">Language</p>
+                    <PremiumGoogleTranslate />
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">Theme</span>
-                    <Button variant="ghost" size="sm" onClick={toggleTheme} className="h-8 w-8 p-0">
-                      {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
-                    </Button>
-                  </div>
-                </div>
 
-                <DropdownMenuSeparator />
+                  <DropdownMenuSeparator />
 
-                <div className="px-2 py-1.5">
-                  <p className="text-xs text-muted-foreground mb-1">Language</p>
-                  <PremiumGoogleTranslate />
-                </div>
-
-                <DropdownMenuSeparator />
-
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-red-500 focus:text-red-500">
-                      <LogOut className="h-4 w-4 mr-2" />
-                      Logout
-                    </DropdownMenuItem>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        You will be logged out from your current session.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction className="bg-destructive text-white" onClick={signOutUser}>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-red-500 focus:text-red-500">
+                        <LogOut className="h-4 w-4 mr-2" />
                         Logout
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                      </DropdownMenuItem>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          You will be logged out from your current session.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction className="bg-destructive text-white" onClick={signOutUser}>
+                          Logout
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           ) : (
-            <Link href="/login" className="flex-shrink-0">
+            <Link href="/login" className="shrink-0">
               <Button size="sm" className="bg-transparent border border-border hover:bg-muted text-foreground h-8 px-4 text-xs sm:text-sm sm:h-9 sm:px-5 rounded-full font-light">
                 Get Started
               </Button>
@@ -468,9 +468,8 @@ const Navbar = () => {
                       key={item.href}
                       href={item.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-light ${
-                        isActiveLink(item.href) ? 'bg-muted text-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                      }`}
+                      className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-light ${isActiveLink(item.href) ? 'bg-muted text-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                        }`}
                     >
                       <item.icon className="h-5 w-5" />
                       {item.label}
@@ -483,9 +482,8 @@ const Navbar = () => {
                       key={item.href}
                       href={item.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-light ${
-                        isActiveLink(item.href) ? 'bg-muted text-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                      }`}
+                      className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-light ${isActiveLink(item.href) ? 'bg-muted text-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                        }`}
                     >
                       <item.icon className="h-5 w-5" />
                       {item.label}
@@ -498,9 +496,8 @@ const Navbar = () => {
                       key={item.href}
                       href={item.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-light ${
-                        isActiveLink(item.href) ? 'bg-muted text-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                      }`}
+                      className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-light ${isActiveLink(item.href) ? 'bg-muted text-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                        }`}
                     >
                       <item.icon className="h-5 w-5" />
                       {item.label}

@@ -61,7 +61,7 @@ export default function Match({ task, roadmapId, chapterNumber }) {
           right: leftRect.right - containerRect.left,
           top: leftRect.top - containerRect.top,
           bottom: leftRect.bottom - containerRect.top,
-          toJSON: () => {},
+          toJSON: () => { },
         };
 
         const to = {
@@ -73,7 +73,7 @@ export default function Match({ task, roadmapId, chapterNumber }) {
           right: rightRect.right - containerRect.left,
           top: rightRect.top - containerRect.top,
           bottom: rightRect.bottom - containerRect.top,
-          toJSON: () => {},
+          toJSON: () => { },
         };
 
         let color = "#0971e8";

@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function POST(request) {
   try {
     const { videoId } = await request.json();
-    
+
     // In production, use youtube-transcript library or YouTube API
     // For demo, return sample transcript
     const transcript = `This is a sample transcript for video ${videoId}. 

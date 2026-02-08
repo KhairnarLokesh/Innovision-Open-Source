@@ -56,7 +56,7 @@ export default function AnalyticsPage() {
     <div className="min-h-screen bg-background relative">
       <PageBackground variant="default" />
       <GridPattern opacity={0.02} />
-      
+
       <div className="max-w-7xl mx-auto p-6 relative z-10">
         <ScrollReveal>
           <div className="mb-6">
@@ -95,9 +95,9 @@ export default function AnalyticsPage() {
               <p className="text-muted-foreground mb-6">
                 Analytics Dashboard is only available for Premium users.
               </p>
-              <Button 
-                onClick={() => router.push("/premium")} 
-                className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-semibold"
+              <Button
+                onClick={() => router.push("/premium")}
+                className="bg-linear-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-semibold"
               >
                 <Crown className="w-4 h-4 mr-2" />
                 Upgrade to Premium

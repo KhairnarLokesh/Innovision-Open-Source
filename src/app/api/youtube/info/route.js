@@ -3,10 +3,10 @@ import { NextResponse } from "next/server";
 export async function POST(request) {
   try {
     const { url } = await request.json();
-    
+
     // Extract video ID from URL
     const videoId = extractVideoId(url);
-    
+
     if (!videoId) {
       return NextResponse.json({ error: "Invalid YouTube URL" }, { status: 400 });
     }
@@ -29,7 +29,7 @@ function extractVideoId(url) {
     /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
     /youtube\.com\/embed\/([^&\n?#]+)/
   ];
-  
+
   for (const pattern of patterns) {
     const match = url.match(pattern);
     if (match) return match[1];
