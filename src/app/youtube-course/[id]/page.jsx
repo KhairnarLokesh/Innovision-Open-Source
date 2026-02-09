@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  ArrowLeft, BookOpen, CheckCircle, Play, Target, Brain, Map, 
+import {
+  ArrowLeft, BookOpen, CheckCircle, Play, Target, Brain, Map,
   Clock, ChevronRight, ChevronDown, ChevronUp, Youtube, User,
   FileText, Award, TrendingUp, Calendar, Lightbulb, MessageSquare,
   Loader2, ExternalLink, CheckCircle2, Circle, X
@@ -37,17 +37,17 @@ export default function YouTubeCourseView() {
 
   const fetchCourse = async () => {
     if (!courseId) return;
-    
+
     try {
       const response = await fetch(`/api/youtube/course/${courseId}`);
-      
+
       if (!response.ok) {
         // If API returns 404, try to get from offline storage
         if (response.status === 404) {
           console.log("Course not found on server, checking offline storage...");
           const offlineCourses = await getOfflineCourses();
           const offlineCourse = offlineCourses.find(c => c.id === courseId);
-          
+
           if (offlineCourse) {
             console.log("Course found in offline storage");
             setCourse(offlineCourse);
@@ -58,10 +58,10 @@ export default function YouTubeCourseView() {
             return;
           }
         }
-        
+
         throw new Error("Failed to fetch course");
       }
-      
+
       const data = await response.json();
       setCourse(data);
       if (data.chapters && data.chapters.length > 0) {
@@ -82,10 +82,28 @@ export default function YouTubeCourseView() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ courseId, chapterNumber, completed: true })
       });
-      
+
+      const handleNextChapter = () => {
+        const currentIndex = course.chapters.findIndex(c => c.number === chapterNumber);
+        if (currentIndex !== -1 && currentIndex < course.chapters.length - 1) {
+          const nextChapter = course.chapters[currentIndex + 1];
+          setActiveChapter(nextChapter);
+          setQuizAnswers({});
+          setQuizSubmitted(false);
+          setQuizResults(null);
+        }
+      };
+
       if (response.ok) {
         toast.success("Chapter marked as complete!");
-        fetchCourse(); // Refresh course data
+
+        // Update local state instead of fetching to preserve active chapter
+        setCourse(prev => ({
+          ...prev,
+          completedChapters: [...(prev.completedChapters || []), chapterNumber].sort((a, b) => a - b)
+        }));
+
+        handleNextChapter();
       } else {
         // Even if server fails, update local state for better UX
         const result = await response.json().catch(() => ({}));
@@ -96,6 +114,7 @@ export default function YouTubeCourseView() {
             completedChapters: [...(prev.completedChapters || []), chapterNumber].sort((a, b) => a - b)
           }));
           toast.success("Chapter marked as complete!");
+          handleNextChapter();
         } else {
           toast.error(result.error || "Failed to mark chapter complete");
         }
@@ -108,7 +127,7 @@ export default function YouTubeCourseView() {
 
   const submitQuiz = async () => {
     if (!activeChapter?.quiz) return;
-    
+
     const answers = activeChapter.quiz.questions.map((_, index) => quizAnswers[index]);
     if (answers.some(a => a === undefined)) {
       toast.error("Please answer all questions");
@@ -119,13 +138,13 @@ export default function YouTubeCourseView() {
       const response = await fetch("/api/youtube/quiz", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          courseId, 
-          chapterNumber: activeChapter.number, 
-          answers 
+        body: JSON.stringify({
+          courseId,
+          chapterNumber: activeChapter.number,
+          answers
         })
       });
-      
+
       const result = await response.json();
       if (result.success) {
         setQuizResults(result);
@@ -151,11 +170,11 @@ export default function YouTubeCourseView() {
             explanation: question.explanation
           };
         });
-        
+
         const score = Math.round((correctCount / activeChapter.quiz.questions.length) * 100);
         const passingScore = activeChapter.quiz.passingScore || 70;
         const passed = score >= passingScore;
-        
+
         const localResult = {
           success: true,
           score,
@@ -164,7 +183,7 @@ export default function YouTubeCourseView() {
           correctCount,
           totalQuestions: activeChapter.quiz.questions.length
         };
-        
+
         setQuizResults(localResult);
         setQuizSubmitted(true);
         if (passed) {
@@ -205,8 +224,8 @@ export default function YouTubeCourseView() {
   }
 
   const completedChapters = course.completedChapters || [];
-  const progress = course.chapters?.length > 0 
-    ? Math.round((completedChapters.length / course.chapters.length) * 100) 
+  const progress = course.chapters?.length > 0
+    ? Math.round((completedChapters.length / course.chapters.length) * 100)
     : 0;
 
   return (
@@ -268,7 +287,7 @@ export default function YouTubeCourseView() {
                     const chapterNum = chapter?.number || index + 1;
                     const isCompleted = completedChapters.includes(chapterNum);
                     const isActive = activeChapter?.number === chapterNum;
-                    
+
                     return (
                       <button
                         key={`chapter-${chapterNum}-${index}`}
@@ -278,17 +297,15 @@ export default function YouTubeCourseView() {
                           setQuizSubmitted(false);
                           setQuizResults(null);
                         }}
-                        className={`w-full flex items-center gap-3 p-4 text-left border-b transition-colors ${
-                          isActive 
-                            ? 'bg-primary/10 border-l-4 border-l-primary' 
+                        className={`w-full flex items-center gap-3 p-4 text-left border-b transition-colors ${isActive
+                            ? 'bg-primary/10 border-l-4 border-l-primary'
                             : 'hover:bg-muted/50 border-l-4 border-l-transparent'
-                        }`}
+                          }`}
                       >
-                        <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
-                          isCompleted 
-                            ? 'bg-green-500 text-white' 
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${isCompleted
+                            ? 'bg-green-500 text-white'
                             : 'bg-muted text-muted-foreground'
-                        }`}>
+                          }`}>
                           {isCompleted ? (
                             <CheckCircle2 className="h-4 w-4" />
                           ) : (
@@ -341,7 +358,7 @@ export default function YouTubeCourseView() {
                 {/* Chapter Content */}
                 {activeChapter.content && (
                   <Card className="bg-card/50 backdrop-blur-sm">
-                    <button 
+                    <button
                       onClick={() => toggleSection('content')}
                       className="w-full p-4 flex items-center justify-between hover:bg-muted/30 transition-colors"
                     >
@@ -397,7 +414,7 @@ export default function YouTubeCourseView() {
                 {/* Quiz Section */}
                 {activeChapter.quiz && (
                   <Card className="bg-card/50 backdrop-blur-sm">
-                    <button 
+                    <button
                       onClick={() => toggleSection('quiz')}
                       className="w-full p-4 flex items-center justify-between hover:bg-muted/30 transition-colors"
                     >
@@ -423,7 +440,7 @@ export default function YouTubeCourseView() {
                                   const isSelected = quizAnswers[qIndex] === oIndex;
                                   const showResult = quizSubmitted && quizResults;
                                   let optionClass = "p-3 rounded-lg border cursor-pointer transition-colors";
-                                  
+
                                   if (showResult) {
                                     if (oIndex === question.correctAnswer) {
                                       optionClass += " bg-green-500/20 border-green-500";
@@ -433,9 +450,9 @@ export default function YouTubeCourseView() {
                                   } else if (isSelected) {
                                     optionClass += " bg-primary/10 border-primary";
                                   }
-                                  
+
                                   return (
-                                    <div 
+                                    <div
                                       key={`q-${qIndex}-opt-${oIndex}`}
                                       onClick={() => !quizSubmitted && setQuizAnswers(prev => ({ ...prev, [qIndex]: oIndex }))}
                                       className={optionClass}
@@ -452,15 +469,15 @@ export default function YouTubeCourseView() {
                               )}
                             </div>
                           ))}
-                          
+
                           {!quizSubmitted ? (
                             <Button onClick={submitQuiz} className="w-full">
                               Submit Quiz
                             </Button>
                           ) : (
                             <div className="flex gap-3">
-                              <Button 
-                                variant="outline" 
+                              <Button
+                                variant="outline"
                                 className="flex-1"
                                 onClick={() => {
                                   setQuizSubmitted(false);
@@ -489,7 +506,7 @@ export default function YouTubeCourseView() {
                 {/* Exercises Section */}
                 {activeChapter.exercises && activeChapter.exercises.length > 0 && (
                   <Card className="bg-card/50 backdrop-blur-sm">
-                    <button 
+                    <button
                       onClick={() => toggleSection('exercises')}
                       className="w-full p-4 flex items-center justify-between hover:bg-muted/30 transition-colors"
                     >
@@ -567,10 +584,10 @@ export default function YouTubeCourseView() {
                     {(course.roadmap.learningPath || []).map((phase, index) => {
                       const phaseChapters = phase?.chapters || [];
                       const completedInPhase = phaseChapters.filter(ch => completedChapters.includes(ch));
-                      const phaseProgress = phaseChapters.length > 0 
-                        ? Math.round((completedInPhase.length / phaseChapters.length) * 100) 
+                      const phaseProgress = phaseChapters.length > 0
+                        ? Math.round((completedInPhase.length / phaseChapters.length) * 100)
                         : 0;
-                      
+
                       return (
                         <div key={`phase-${index}`} className="p-4 bg-muted/30 rounded-lg">
                           <div className="flex items-center justify-between mb-2">
@@ -591,7 +608,7 @@ export default function YouTubeCourseView() {
                       );
                     })}
                   </div>
-                  
+
                   {course.roadmap.nextSteps && (
                     <div className="mt-6 p-4 bg-primary/5 rounded-lg">
                       <h4 className="font-semibold mb-3">Next Steps After This Course</h4>
@@ -639,7 +656,7 @@ export default function YouTubeCourseView() {
                 <CardContent>
                   <h4 className="font-semibold mb-2">{course.finalProject.title || 'Final Project'}</h4>
                   <p className="text-muted-foreground mb-4">{course.finalProject.description}</p>
-                  
+
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
                       <p className="font-medium mb-2">Requirements</p>
@@ -664,7 +681,7 @@ export default function YouTubeCourseView() {
                       </ul>
                     </div>
                   </div>
-                  
+
                   <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
                     <Clock className="h-4 w-4" />
                     Estimated time: {course.finalProject.estimatedTime || '2-3 hours'}
