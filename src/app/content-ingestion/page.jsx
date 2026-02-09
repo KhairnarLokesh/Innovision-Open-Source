@@ -54,7 +54,7 @@ export default function ContentIngestion() {
       });
 
       const data = await response.json();
-      
+
       if (response.ok) {
         toast.success(`Content ingested successfully! ${data.chunks} chunks created.`);
         setFile(null);
@@ -71,10 +71,10 @@ export default function ContentIngestion() {
     <div className="min-h-screen bg-background p-6 relative">
       <PageBackground />
       <GridPattern opacity={0.02} />
-      
+
       <div className="max-w-7xl mx-auto relative z-10">
-        <PageHeader 
-          title="Smart Content Ingestion" 
+        <PageHeader
+          title="Smart Content Ingestion"
           description="Auto-ingest PDFs and textbooks to build knowledge graphs"
           icon={Upload}
           iconColor="text-purple-500"
@@ -83,9 +83,9 @@ export default function ContentIngestion() {
 
         {!premiumStatus.isPremium && (
           <ScrollReveal delay={100}>
-            <div className="mb-6 p-4 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-xl backdrop-blur-sm">
+            <div className="mb-6 p-4 bg-linear-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-xl backdrop-blur-sm">
               <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg shadow-yellow-500/25">
+                <div className="shrink-0 w-10 h-10 bg-linear-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg shadow-yellow-500/25">
                   <Crown className="h-5 w-5 text-black" />
                 </div>
                 <div className="flex-1">
@@ -95,7 +95,7 @@ export default function ContentIngestion() {
                   </p>
                   <Button
                     onClick={() => router.push("/premium")}
-                    className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black transition-all duration-300 hover:scale-105"
+                    className="bg-linear-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black transition-all duration-300 hover:scale-105"
                   >
                     Upgrade to Premium - ₹100/month
                   </Button>

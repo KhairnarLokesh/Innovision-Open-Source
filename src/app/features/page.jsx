@@ -112,7 +112,7 @@ export default function FeaturesPage() {
     <div className="min-h-screen bg-background relative">
       <PageBackground />
       <GridPattern opacity={0.02} />
-      
+
       <div className="max-w-7xl mx-auto p-6 space-y-8 relative z-10">
         <ScrollReveal>
           <div className="text-center space-y-4">
@@ -129,9 +129,9 @@ export default function FeaturesPage() {
 
         {!premiumStatus.isPremium && (
           <ScrollReveal delay={100}>
-            <div className="mb-6 p-6 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border-2 border-yellow-500/30 rounded-2xl backdrop-blur-sm">
+            <div className="mb-6 p-6 bg-linear-to-r from-yellow-500/10 to-orange-500/10 border-2 border-yellow-500/30 rounded-2xl backdrop-blur-sm">
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg shadow-yellow-500/25">
+                <div className="shrink-0 w-12 h-12 bg-linear-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg shadow-yellow-500/25">
                   <Crown className="h-6 w-6 text-black" />
                 </div>
                 <div className="flex-1">
@@ -155,7 +155,7 @@ export default function FeaturesPage() {
                   </ul>
                   <Button
                     onClick={() => router.push("/premium")}
-                    className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-semibold transition-all duration-300 hover:scale-105"
+                    className="bg-linear-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-semibold transition-all duration-300 hover:scale-105"
                   >
                     Upgrade to Premium - ₹100/month
                   </Button>
@@ -169,9 +169,8 @@ export default function FeaturesPage() {
           {features.map((feature) => (
             <Link key={feature.title} href={feature.href}>
               <HoverCard>
-                <Card className={`h-full bg-card/50 backdrop-blur-sm border-border/50 transition-all duration-300 cursor-pointer relative ${
-                  feature.highlight ? 'border-2 border-orange-500/50 shadow-lg shadow-orange-500/10' : feature.borderColor
-                }`}>
+                <Card className={`h-full bg-card/50 backdrop-blur-sm border-border/50 transition-all duration-300 cursor-pointer relative ${feature.highlight ? 'border-2 border-orange-500/50 shadow-lg shadow-orange-500/10' : feature.borderColor
+                  }`}>
                   {feature.premium && (
                     <div className="absolute top-3 right-3">
                       {feature.comingSoon ? (
@@ -179,12 +178,12 @@ export default function FeaturesPage() {
                           {feature.badge}
                         </span>
                       ) : feature.highlight ? (
-                        <span className="px-2 py-1 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-semibold rounded-full flex items-center gap-1">
+                        <span className="px-2 py-1 bg-linear-to-r from-orange-500 to-amber-500 text-white text-xs font-semibold rounded-full flex items-center gap-1">
                           <Download className="h-3 w-3" />
                           {feature.badge}
                         </span>
                       ) : (
-                        <span className="px-2 py-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-black text-xs font-semibold rounded-full flex items-center gap-1">
+                        <span className="px-2 py-1 bg-linear-to-r from-yellow-500 to-orange-500 text-black text-xs font-semibold rounded-full flex items-center gap-1">
                           <Crown className="h-3 w-3" />
                           {feature.badge}
                         </span>

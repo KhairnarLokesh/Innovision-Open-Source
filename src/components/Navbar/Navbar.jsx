@@ -133,7 +133,7 @@ const Navbar = () => {
         {/* Logo - Left */}
         <Link
           href={user ? `/roadmap` : "/"}
-          className="flex items-center gap-1.5 sm:gap-2 hover:opacity-80 transition-opacity flex-shrink-0"
+          className="flex items-center gap-1.5 sm:gap-2 hover:opacity-80 transition-opacity shrink-0"
         >
           <Image src="/InnoVision_LOGO-removebg-preview.png" alt="logo" width={28} height={28} className="sm:w-8 sm:h-8" />
           <span className="text-sm sm:text-base font-light text-foreground">InnoVision</span>
@@ -150,7 +150,7 @@ const Navbar = () => {
         />
 
         {/* Right Section */}
-        <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
           {user && (
             <>
               {/* Premium Badge */}
@@ -241,7 +241,7 @@ const Navbar = () => {
               signOutUser={signOutUser}
             />
           ) : (
-            <Link href="/login" className="flex-shrink-0">
+            <Link href="/login" className="shrink-0">
               <Button size="sm" className="bg-transparent border border-border hover:bg-muted text-foreground h-8 px-4 text-xs sm:text-sm sm:h-9 sm:px-5 rounded-full font-light">
                 Get Started
               </Button>

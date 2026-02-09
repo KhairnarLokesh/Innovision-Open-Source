@@ -6,12 +6,12 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/auth";
 
-export default function BookmarkButton({ 
-  roadmapId, 
-  chapterNumber, 
+export default function BookmarkButton({
+  roadmapId,
+  chapterNumber,
   chapterTitle = "",
   roadmapTitle = "",
-  size = "default" 
+  size = "default"
 }) {
   const { user } = useAuth();
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -20,12 +20,12 @@ export default function BookmarkButton({
   // Check if chapter is bookmarked on mount
   useEffect(() => {
     if (!user) return;
-    
+
     async function checkBookmark() {
       try {
         const res = await fetch("/api/bookmarks");
         const data = await res.json();
-        
+
         if (data.bookmarks) {
           const bookmarkId = `${roadmapId}_${chapterNumber}`;
           setIsBookmarked(data.bookmarks.some(b => b.id === bookmarkId));
@@ -34,7 +34,7 @@ export default function BookmarkButton({
         console.error("Error checking bookmark:", error);
       }
     }
-    
+
     checkBookmark();
   }, [user, roadmapId, chapterNumber]);
 
@@ -45,7 +45,7 @@ export default function BookmarkButton({
     }
 
     setLoading(true);
-    
+
     try {
       const res = await fetch("/api/bookmarks", {
         method: "POST",
@@ -98,14 +98,14 @@ export default function BookmarkButton({
       className={`
         ${sizeClasses[size]}
         transition-all duration-200
-        ${isBookmarked 
-          ? "text-yellow-500 hover:text-yellow-600" 
+        ${isBookmarked
+          ? "text-yellow-500 hover:text-yellow-600"
           : "text-muted-foreground hover:text-foreground"
         }
       `}
       title={isBookmarked ? "Remove bookmark" : "Bookmark this chapter"}
     >
-      <Bookmark 
+      <Bookmark
         className={`
           ${iconSizes[size]}
           transition-all duration-200

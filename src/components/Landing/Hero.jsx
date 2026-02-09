@@ -12,19 +12,19 @@ const Hero = () => {
   return (
     <section className="relative w-full min-h-[calc(100vh-64px)] flex items-center justify-center overflow-hidden px-4">
       {/* Gradient orbs */}
-      <div 
+      <div
         className={`absolute ${effects.gradient.orb1.position} ${effects.gradient.orb1.size} ${effects.gradient.orb1.color} rounded-full ${effects.blur["3xl"]} animate-pulse`}
         style={{ animationDuration: effects.gradient.orb1.duration }}
       />
-      <div 
+      <div
         className={`absolute ${effects.gradient.orb2.position} ${effects.gradient.orb2.size} ${effects.gradient.orb2.color} rounded-full ${effects.blur["3xl"]} animate-pulse`}
         style={{ animationDuration: effects.gradient.orb2.duration, animationDelay: effects.gradient.orb2.delay }}
       />
-      
-      <div className="container relative z-10 mx-auto px-2 sm:px-4 md:px-6 py-8 sm:py-12 md:py-24">
+
+      <div className="container relative z-10 mx-auto px-2 sm:px-4 md:px-6 py-8 sm:py-12 md:pb-24 pt-12">
         <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
           {/* Badge */}
-          <div 
+          <div
             className={`${components.badge.base} ${components.badge.hover} mb-6 sm:mb-8 animate-fade-in`}
             style={{ animationDelay: animations.delay.badge }}
           >
@@ -38,8 +38,8 @@ const Hero = () => {
           </div>
 
           {/* Logo with glow */}
-          <div 
-            className="mb-4 sm:mb-6 animate-fade-in relative group" 
+          <div
+            className="mb-4 sm:mb-6 animate-fade-in relative group"
             style={{ animationDelay: animations.delay.logo }}
           >
             <div className={`absolute inset-0 bg-blue-500/20 rounded-full ${effects.blur["2xl"]} group-hover:bg-blue-500/30 transition-all duration-500`} />
@@ -55,14 +55,14 @@ const Hero = () => {
 
           {/* Main heading with gradient */}
           <h1 className={`${typography.hero.title} mb-4 sm:mb-6`}>
-            <span 
-              className="block text-foreground animate-fade-in" 
+            <span
+              className="block text-foreground animate-fade-in"
               style={{ animationDelay: animations.delay.heading }}
             >
               Learn Any Topic
             </span>
-            <span 
-              className={`block bg-gradient-to-r ${colors.primary.gradient} bg-clip-text text-transparent animate-fade-in animate-gradient`}
+            <span
+              className={`block bg-linear-to-r ${colors.primary.gradient} bg-clip-text text-transparent animate-fade-in animate-gradient`}
               style={{ animationDelay: animations.delay.subheading }}
             >
               with AI-Generated Courses
@@ -70,7 +70,7 @@ const Hero = () => {
           </h1>
 
           {/* Subtitle */}
-          <p 
+          <p
             className={`${typography.hero.subtitle} text-muted-foreground max-w-2xl mb-4 sm:mb-6 leading-relaxed animate-fade-in px-2`}
             style={{ animationDelay: animations.delay.subtitle }}
           >
@@ -79,7 +79,7 @@ const Hero = () => {
           </p>
 
           {/* Feature highlights with icons */}
-          <div 
+          <div
             className={`flex flex-wrap items-center justify-center ${landingTheme.spacing.gap.sm} mb-6 sm:mb-10 text-xs sm:text-sm text-muted-foreground animate-fade-in font-light`}
             style={{ animationDelay: animations.delay.features }}
           >
@@ -99,8 +99,8 @@ const Hero = () => {
           </div>
 
           {/* CTA Buttons */}
-          <div 
-            className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12 animate-fade-in w-full sm:w-auto" 
+          <div
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12 animate-fade-in w-full sm:w-auto"
             style={{ animationDelay: animations.delay.buttons }}
           >
             <MagneticButton strength={0.2}>
@@ -131,8 +131,8 @@ const Hero = () => {
           </div>
 
           {/* Stats with Animated Counters */}
-          <div 
-            className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4 md:gap-12 pt-6 sm:pt-8 border-t border-border w-full max-w-3xl animate-fade-in" 
+          <div
+            className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4 md:gap-12 pt-6 sm:pt-8 border-t border-border w-full max-w-3xl animate-fade-in"
             style={{ animationDelay: animations.delay.stats }}
           >
             {stats.map((stat, i) => {
@@ -159,8 +159,8 @@ const Hero = () => {
           </div>
 
           {/* Trust badges */}
-          <div 
-            className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-[10px] sm:text-xs text-muted-foreground animate-fade-in font-light" 
+          <div
+            className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-[10px] sm:text-xs text-muted-foreground animate-fade-in font-light"
             style={{ animationDelay: animations.delay.trust }}
           >
             {trustBadges.map((text, i) => (

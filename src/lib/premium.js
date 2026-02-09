@@ -57,7 +57,7 @@ export async function checkTrialStatus(userEmail) {
     const now = new Date();
     const daysSinceCreation = Math.floor((now - createdAt) / (1000 * 60 * 60 * 24));
     const daysRemaining = Math.max(0, 7 - daysSinceCreation);
-    
+
     return {
       isInTrial: daysSinceCreation < 7,
       daysRemaining,
@@ -87,7 +87,7 @@ export async function isPremiumUser(userEmail) {
     }
 
     const userData = userDoc.data();
-    
+
     // Check if user has paid premium status and it's not expired
     if (userData.isPremium && userData.premiumExpiresAt) {
       const expiryDate = new Date(userData.premiumExpiresAt);
@@ -108,13 +108,13 @@ export async function isPremiumUser(userEmail) {
  */
 export async function checkFullAccess(userEmail) {
   const isPremium = await isPremiumUser(userEmail);
-  
+
   if (isPremium) {
     return { hasAccess: true, isPremium: true, isInTrial: false, daysRemaining: 0 };
   }
-  
+
   const trialStatus = await checkTrialStatus(userEmail);
-  
+
   return {
     hasAccess: trialStatus.isInTrial,
     isPremium: false,
@@ -140,7 +140,7 @@ export async function getUserCourseCount(userEmail) {
       .collection("roadmaps")
       .where("process", "==", "completed")
       .get();
-    
+
     return snapshot.size;
   } catch (error) {
     console.error("Error getting course count:", error);
@@ -163,7 +163,7 @@ export async function getYouTubeCourseCount(userEmail) {
       .doc(userEmail)
       .collection("youtube-courses")
       .get();
-    
+
     return snapshot.size;
   } catch (error) {
     console.error("Error getting YouTube course count:", error);
@@ -186,7 +186,7 @@ export async function getStudioCourseCount(userEmail) {
       .doc(userEmail)
       .collection("studio-courses")
       .get();
-    
+
     return snapshot.size;
   } catch (error) {
     console.error("Error getting Studio course count:", error);

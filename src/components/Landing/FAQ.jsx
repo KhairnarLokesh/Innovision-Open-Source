@@ -34,7 +34,7 @@ const FAQItem = ({ question, answer, isOpen, onClick }) => (
   <div className={`rounded-2xl border border-border bg-background backdrop-blur-sm overflow-hidden transition-all duration-300 ${isOpen ? 'border-blue-500/30' : 'hover:border-border/60'}`}>
     <button onClick={onClick} className="flex w-full items-center justify-between p-5 text-left group">
       <span className="font-light pr-4 group-hover:text-blue-500 transition-colors text-foreground">{question}</span>
-      <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${isOpen ? 'bg-blue-500 text-white' : 'border border-border text-foreground group-hover:border-blue-500/30'}`}>
+      <div className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${isOpen ? 'bg-blue-500 text-white' : 'border border-border text-foreground group-hover:border-blue-500/30'}`}>
         {isOpen ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
       </div>
     </button>

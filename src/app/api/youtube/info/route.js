@@ -8,7 +8,7 @@ export async function POST(request) {
       return NextResponse.json({ error: "URL is required" }, { status: 400 });
     }
     const videoId = extractVideoId(url);
-    
+
     if (!videoId) {
       return NextResponse.json({ error: "Invalid YouTube URL" }, { status: 400 });
     }
@@ -33,7 +33,7 @@ function extractVideoId(url) {
     /youtube\.com\/v\/([^&\n?#]+)/,
     /youtube\.com\/shorts\/([^&\n?#]+)/
   ];
-  
+
   for (const pattern of patterns) {
     const match = url.match(pattern);
     if (match && match[1]) return match[1];

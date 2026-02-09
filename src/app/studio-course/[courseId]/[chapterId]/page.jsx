@@ -15,7 +15,7 @@ export default function StudioCoursePage() {
   const [loading, setLoading] = useState(true);
   const { awardXP } = useContext(xpContext);
   const [viewAwarded, setViewAwarded] = useState(false);
-  
+
   const chapterIndex = parseInt(params.chapterId) - 1;
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function StudioCoursePage() {
       if (res.ok) {
         const data = await res.json();
         setCourseData(data); // Store original data
-        
+
         // Transform course data to match roadmap structure for Sidebar
         const transformedData = {
           courseTitle: data.title,
