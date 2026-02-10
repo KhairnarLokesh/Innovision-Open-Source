@@ -162,28 +162,37 @@ export default function ContactPage() {
                     </div>
                   </form>
                 </div>
-                <div className="flex justify-center gap-6 mt-10 pt-6 border-t border-white/10">
-                  <a href="https://www.instagram.com/hands_on_coding_028/#" className="text-xl text-gray-400  hover:text-blue-400 hover:scale-110 transition-all duration-300">
-                    <FaInstagram />
-                  </a>
-                  <a href="https://wa.me/7019003366" className="text-xl text-gray-400  hover:text-blue-400 hover:scale-110 transition-all duration-300">
-                    <IoLogoWhatsapp />
-                  </a>
-                  <a href="https://github.com/ItsVikasA" className="text-xl text-gray-400  hover:text-blue-400 hover:scale-110 transition-all duration-300">
-                    <FaGithub />
-                  </a>
-                  <a href="https://www.linkedin.com/in/vikas028/" className="text-xl text-gray-400  hover:text-blue-400 hover:scale-110 transition-all duration-300">
-                    <FaLinkedin />
-                  </a>
-                  <a href="https://www.youtube.com/@hands_on_coding_028" className="text-xl text-gray-400  hover:text-blue-400 hover:scale-110 transition-all duration-300">
-                    <FaYoutube />
-                  </a>
-                </div>
+              </div> {/* card */}
+              <div className="flex justify-center text-muted-foreground space-x-6 mt-12">
+                <a href="https://www.instagram.com/hands_on_coding_028/#"
+                  className="text-2xl hover:text-foreground hover:scale-110 transition-all duration-300">
+                  <FaInstagram />
+                </a>
+
+                <a href="https://wa.me/7019003366"
+                  className="text-2xl hover:text-foreground hover:scale-110 transition-all duration-300">
+                  <IoLogoWhatsapp />
+                </a>
+
+                <a href="https://github.com/ItsVikasA"
+                  className="text-2xl hover:text-foreground hover:scale-110 transition-all duration-300">
+                  <FaGithub />
+                </a>
+
+                <a href="https://www.linkedin.com/in/vikas028/"
+                  className="text-2xl hover:text-foreground hover:scale-110 transition-all duration-300">
+                  <FaLinkedin />
+                </a>
+
+                <a href="https://www.youtube.com/@hands_on_coding_028"
+                  className="text-2xl hover:text-foreground hover:scale-110 transition-all duration-300">
+                  <FaYoutube />
+                </a>
               </div>
             </ScrollReveal>
           )}
-        </div>
       </div>
     </div>
+    </div >
   );
 }
