@@ -24,11 +24,11 @@ export default function StudioCoursePage() {
 
   // Award XP for viewing chapter
   useEffect(() => {
-    if (session && awardXP && !viewAwarded) {
+    if (user && awardXP && !viewAwarded) {
       awardXP('view_course');
       setViewAwarded(true);
     }
-  }, [session, awardXP, viewAwarded]);
+  }, [user, awardXP, viewAwarded]);
 
   const fetchCourse = async () => {
     try {
