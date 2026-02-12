@@ -166,6 +166,14 @@ export default function Landing() {
                       Contact
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      href="/feedback"
+                      className="hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 transition-colors"
+                    >
+                      Feedback
+                    </Link>
+                  </li>
                 </ul>
               </div>
 
