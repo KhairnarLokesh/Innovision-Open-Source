@@ -7,7 +7,7 @@ import { Sparkles } from "lucide-react";
 import Image from "next/image";
 
 export default function SignIn() {
-  const { user, googleSignIn, githubSignIn } = useAuth();
+  const { user, googleSignIn, githubSignIn, guestSignIn } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -89,6 +89,23 @@ export default function SignIn() {
                   <img src="/google.png" alt="Google" className="w-5 h-5" />
                   <span className="font-light text-foreground">
                     Continue with Google
+                  </span>
+                </button>
+
+                <div className="relative my-6 px-10">
+                  <div className="absolute inset-x-10 top-1/2 h-px bg-border -translate-y-1/2" />
+                  <span className="relative z-10 bg-background px-4 text-xs font-light text-muted-foreground uppercase tracking-wider block mx-auto w-fit">
+                    Or
+                  </span>
+                </div>
+
+                <button
+                  onClick={() => guestSignIn()}
+                  className="group w-full h-12 px-6 border border-border border-dashed rounded-full transition-all duration-300 hover:border-foreground/30 hover:bg-muted hover:scale-[1.02] flex items-center justify-center gap-3"
+                >
+                  <Sparkles className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors" />
+                  <span className="font-light text-foreground">
+                    Continue as Guest
                   </span>
                 </button>
               </div>

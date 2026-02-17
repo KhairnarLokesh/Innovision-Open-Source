@@ -107,7 +107,7 @@ export const XpProvider = ({ children }) => {
         if (newCombo === 2 || newCombo === 5 || newCombo === 10 || newCombo === 20) {
           fireConfetti("combo");
         }
-        
+
         // Clear existing hide timeout
         if (comboHideTimeoutRef.current) {
           clearTimeout(comboHideTimeoutRef.current);
@@ -204,7 +204,7 @@ export const XpProvider = ({ children }) => {
         const timeoutId = setTimeout(() => achievements.level25(), 3500);
         milestoneTimeoutRef.current.push(timeoutId);
       }
-      
+
       setLevelUpData({
         newLevel,
         xpGained: newXP - oldXP,
@@ -241,7 +241,12 @@ export const XpProvider = ({ children }) => {
     if (!user?.email) return;
 
     try {
-      const res = await fetch(`/api/gamification/stats?userId=${user.email}`);
+      const res = await fetch(`/api/gamification/stats?userId=${encodeURIComponent(user.email)}`);
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
       const data = await res.json();
 
       if (data && typeof data.xp === "number") {
@@ -261,9 +266,12 @@ export const XpProvider = ({ children }) => {
         setLevel(newLevel);
       }
     } catch (error) {
-      console.error("Error fetching XP:", error);
+      // Don't log "Failed to fetch" repeatedly to console unless in debug
+      if (process.env.NODE_ENV === "development") {
+        console.warn("Gamification stats sync issue:", error.message);
+      }
     }
-  }, [user, xp, checkMilestones]);
+  }, [user?.email, xp, checkMilestones]);
 
   const awardXP = useCallback(
     async (action, value = null, useComboMultiplier = false) => {

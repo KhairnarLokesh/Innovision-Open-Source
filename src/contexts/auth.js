@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
-import { GoogleAuthProvider, GithubAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
+import { GoogleAuthProvider, GithubAuthProvider, signInWithPopup, signOut, onAuthStateChanged, signInAnonymously } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 
@@ -27,21 +27,23 @@ export function AuthProvider({ children }) {
           }
 
           // 2. Fetch additional user data from Firestore
-          const userRef = doc(db, "users", firebaseUser.email);
+          const userKey = firebaseUser.email || `guest_${firebaseUser.uid}`;
+          const userRef = doc(db, "users", userKey);
           const userSnap = await getDoc(userRef);
 
           // 3. ONLY set the user state after cookie is (attempted to be) synced
-          if (userSnap.exists()) {
-            setUser({
-              ...firebaseUser,
-              ...userSnap.data(),
-            });
-          } else {
-            setUser(firebaseUser);
-          }
+          const userData = userSnap.exists() ? userSnap.data() : {};
+          setUser({
+            ...firebaseUser,
+            email: firebaseUser.email || userKey, // Ensure email is never null for guest mode
+            ...userData,
+          });
         } catch (error) {
           console.error("AUTH_CONTEXT: error during sync/fetch", error);
-          setUser(firebaseUser); // Fallback to basic user
+          setUser({
+            ...firebaseUser,
+            email: firebaseUser.email || `guest_${firebaseUser.uid}`,
+          }); // Fallback to basic user with guest email
         }
       } else {
         // Clear session cookie
@@ -80,6 +82,17 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const guestSignIn = async () => {
+    try {
+      const result = await signInAnonymously(auth);
+      await saveUserToFirestore(result.user, "guest");
+      return result.user;
+    } catch (error) {
+      console.error("Error signing in as guest:", error);
+      throw error;
+    }
+  };
+
   const logout = async () => {
     try {
       await signOut(auth);
@@ -94,14 +107,15 @@ export function AuthProvider({ children }) {
 
   const saveUserToFirestore = async (user, providerName) => {
     try {
-      const userRef = doc(db, "users", user.email);
+      const userKey = user.email || `guest_${user.uid}`;
+      const userRef = doc(db, "users", userKey);
       const userSnap = await getDoc(userRef);
 
       if (!userSnap.exists()) {
         await setDoc(userRef, {
-          name: user.displayName,
-          email: user.email,
-          image: user.photoURL,
+          name: user.displayName || "Guest Learner",
+          email: user.email || userKey,
+          image: user.photoURL || "/InnoVision_LOGO-removebg-preview.png",
           provider: providerName,
           xp: 0,
           roadmapLevel: {
@@ -129,7 +143,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, googleSignIn, githubSignIn, logout, getToken }}>
+    <AuthContext.Provider value={{ user, loading, googleSignIn, githubSignIn, guestSignIn, logout, getToken }}>
       {children}
     </AuthContext.Provider>
   );

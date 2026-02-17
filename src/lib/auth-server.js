@@ -23,11 +23,15 @@ export async function getServerSession() {
     // This is a simplified approach - ideally use Firebase Admin to verify
     try {
       const payload = JSON.parse(atob(idToken.split(".")[1]));
+      // Fallback to uid if email is not present (for anonymous users)
+      const userEmail = payload.email || `guest_${payload.sub}`;
       return {
         user: {
-          email: payload.email,
-          name: payload.name,
+          email: userEmail,
+          name: payload.name || "Guest Learner",
           image: payload.picture,
+          isAnonymous: !payload.email,
+          uid: payload.sub,
         },
       };
     } catch (e) {
