@@ -1,9 +1,8 @@
-
 "use client";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, BookOpen, Sparkles } from "lucide-react";
-import DeleteRoadmap from "@/components/Home/DeleteRoadmap";
+import CourseCard from "@/components/Home/CourseCard";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -42,6 +41,8 @@ export default function page() {
         fetchRoadmaps();
     }, []);
 
+    const completedCourses = roadmaps.filter(r => r.process === "completed");
+
     return (
         <div className="min-h-screen bg-background relative">
             <PageBackground variant="courses" />
@@ -57,14 +58,13 @@ export default function page() {
                 />
 
                 <div className="flex gap-6 justify-center flex-wrap w-full">
-
                     {loading ? (
                         Array(6)
                             .fill(0)
                             .map((_, i) => (
                                 <Skeleton
                                     key={i}
-                                    className="w-[320px] h-64 rounded-xl"
+                                    className="w-[320px] h-[240px] rounded-xl"
                                 />
                             ))
                     ) : error ? (
@@ -72,7 +72,7 @@ export default function page() {
                             <div className="flex flex-col items-center">
                                 <BookOpen className="h-12 w-12 mb-4 opacity-50" />
                                 <p className="text-lg font-semibold">
-                                    We couldn’t load your courses
+                                    We couldn't load your courses
                                 </p>
                                 <p className="text-sm mt-2">
                                     Please try again or refresh the page.
@@ -85,12 +85,12 @@ export default function page() {
                                 </button>
                             </div>
                         </div>
-                    ) : roadmaps?.filter(r => r.process === "completed")?.length === 0 ? (
+                    ) : completedCourses.length === 0 ? (
                         <div className="w-full text-center py-16 text-muted-foreground">
                             <div className="flex flex-col items-center">
                                 <BookOpen className="h-12 w-12 mb-4 opacity-50" />
                                 <p className="text-lg font-medium">
-                                    You don’t have any courses yet
+                                    You don't have any courses yet
                                 </p>
                                 <p className="text-sm mt-2">
                                     Start by generating your first roadmap
@@ -102,38 +102,28 @@ export default function page() {
                         </div>
                     ) : (
                         <>
-                            {roadmaps
-                                .filter(r => r.process === "completed")
-                                .map((roadmap, index) => (
-                                    <ScrollReveal>
-                                        <HoverCard>
-                                            <Card className="w-[320px] h-[200px] relative flex items-center justify-center border-2 border-dashed border-border/50 bg-card/30 backdrop-blur-sm hover:border-blue-500/50 transition-colors">
-                                                <div className="flex flex-col items-center text-muted-foreground">
-                                                    <div className="w-16 h-16 rounded-full bg-blue-500/10 flex items-center justify-center mb-3">
-                                                        <Plus strokeWidth={1.5} className="w-8 h-8 text-blue-500" />
-                                                    </div>
-                                                    <p className="text-lg text-center font-medium">
-                                                        Create your course
-                                                    </p>
-                                                </div>
-                                                <Link href={`/generate`} scroll={false}>
-                                                    <span className="absolute inset-0"></span>
-                                                </Link>
-                                            </Card>
-                                        </HoverCard>
-                                    </ScrollReveal>
-                                ))}
+                            {/* Course Cards */}
+                            {completedCourses.map((roadmap, index) => (
+                                <ScrollReveal key={roadmap.id} delay={index * 50}>
+                                    <HoverCard>
+                                        <CourseCard
+                                            course={roadmap}
+                                            onDelete={fetchRoadmaps}
+                                        />
+                                    </HoverCard>
+                                </ScrollReveal>
+                            ))}
 
-                            {/* Create Card */}
-                            <ScrollReveal>
+                            {/* Create New Course Card */}
+                            <ScrollReveal delay={completedCourses.length * 50}>
                                 <HoverCard>
-                                    <Card className="w-[320px] h-[200px] relative flex items-center justify-center border-2 border-dashed border-border/50 bg-card/30 backdrop-blur-sm hover:border-blue-500/50 transition-colors">
+                                    <Card className="w-[320px] h-[240px] relative flex items-center justify-center border-2 border-dashed border-border/50 bg-card/30 backdrop-blur-sm hover:border-blue-500/50 transition-colors">
                                         <div className="flex flex-col items-center text-muted-foreground">
                                             <div className="w-16 h-16 rounded-full bg-blue-500/10 flex items-center justify-center mb-3">
                                                 <Plus strokeWidth={1.5} className="w-8 h-8 text-blue-500" />
                                             </div>
                                             <p className="text-lg text-center font-medium">
-                                                Create your course
+                                                Create New Course
                                             </p>
                                         </div>
                                         <Link href={`/generate`} scroll={false}>

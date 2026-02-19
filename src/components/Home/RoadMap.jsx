@@ -1,15 +1,19 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState, useContext } from "react";
-import { CircleCheckIcon } from "lucide-react";
+import { CircleCheckIcon, Clock } from "lucide-react";
 import xpContext from "@/contexts/xp";
 import { useAuth } from "@/contexts/auth";
+import { calculateEstimatedTime } from "@/lib/time-utils";
 
 function Roadmap({ roadMap, id }) {
   const [height, setHeight] = useState((roadMap.chapters.length - 1) * 34 * 4);
   const { awardXP } = useContext(xpContext);
   const { user } = useAuth();
   const [viewAwarded, setViewAwarded] = useState(false);
+
+  // Calculate estimated time
+  const estimatedTime = calculateEstimatedTime(roadMap.chapters.length, roadMap.difficulty);
 
   useEffect(() => {
     function updateHeight() {
@@ -39,6 +43,17 @@ function Roadmap({ roadMap, id }) {
       <div className="ml-3 mb-3">
         <h1 className="text-2xl font-semibold">{roadMap.courseTitle}</h1>
         <p className="text-primary ml-2">{roadMap.courseDescription}</p>
+        
+        {/* Estimated Time Badge */}
+        <div className="flex items-center gap-2 mt-3 ml-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-sm">
+            <Clock className="h-3.5 w-3.5" />
+            <span className="font-medium">{estimatedTime}</span>
+          </div>
+          <div className="text-xs text-muted-foreground">
+            {roadMap.chapters.length} {roadMap.chapters.length === 1 ? "chapter" : "chapters"}
+          </div>
+        </div>
       </div>
       <div className="relative flex flex-col">
         <div
