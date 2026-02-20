@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/auth";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Trophy, TrendingUp, BookOpen, Calendar, Settings, Award } from "lucide-react";
+import { Trophy, TrendingUp, BookOpen, Calendar, Settings, Award, ChevronLeft, ChevronRight } from "lucide-react";
+import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import Sidebar from "@/components/dashboard/Sidebar";
 import { ProblemSolvedChart } from "@/components/ui/problem-sloved-chart";
@@ -44,6 +45,44 @@ export default function ProfilePage() {
   const [premiumStatus, setPremiumStatus] = useState(null);
   const [showPremiumDialog, setShowPremiumDialog] = useState(false);
   const [blockedFeature, setBlockedFeature] = useState("");
+  const tabsListRef = useRef(null);
+  const [activeTab, setActiveTab] = useState("overview");
+
+  const tabOrder = ["overview", "progress", "courses", "activity", "compete", "certificates", "research", "settings"];
+
+  const navigateTab = (direction) => {
+    const currentIndex = tabOrder.indexOf(activeTab);
+    let nextIndex;
+    if (direction === "next") {
+      nextIndex = (currentIndex + 1) % tabOrder.length;
+    } else {
+      nextIndex = (currentIndex - 1 + tabOrder.length) % tabOrder.length;
+    }
+    setActiveTab(tabOrder[nextIndex]);
+  };
+
+  const scrollTabs = (direction) => {
+    if (tabsListRef.current) {
+      const scrollAmount = 200;
+      tabsListRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (tabsListRef.current) {
+      const activeElement = tabsListRef.current.querySelector('[data-state="active"]');
+      if (activeElement) {
+        activeElement.scrollIntoView({
+          behavior: "smooth",
+          inline: "center",
+          block: "nearest",
+        });
+      }
+    }
+  }, [activeTab]);
 
   useEffect(() => {
     fetchUser();
@@ -152,41 +191,83 @@ export default function ProfilePage() {
 
           {/* Main Content - All original tabs */}
           <div className="space-y-6">
-            <Tabs defaultValue="overview" className="space-y-4">
-              <TabsList className="grid w-full grid-cols-8">
-                <TabsTrigger value="overview">
-                  <Trophy className="h-4 w-4 mr-2" />
-                  Overview
-                </TabsTrigger>
-                <TabsTrigger value="progress" className="flex-1 min-w-[100px] sm:flex-none">
-                  <TrendingUp className="h-4 w-4 mr-2" />
-                  Progress
-                </TabsTrigger>
-                <TabsTrigger value="courses" className="flex-1 min-w-[100px] sm:flex-none">
-                  <BookOpen className="h-4 w-4 mr-2" />
-                  Courses
-                </TabsTrigger>
-                <TabsTrigger value="activity" className="flex-1 min-w-[100px] sm:flex-none">
-                  <Calendar className="h-4 w-4 mr-2" />
-                  Activity
-                </TabsTrigger>
-                <TabsTrigger value="compete" className="flex-1 min-w-[100px] sm:flex-none">
-                  <Trophy className="h-4 w-4 mr-2" />
-                  Compete
-                </TabsTrigger>
-                <TabsTrigger value="certificates">
-                  <Award className="h-4 w-4 mr-2" />
-                  Certificates
-                </TabsTrigger>
-                <TabsTrigger value="research">
-                  <Database className="h-4 w-4 mr-2" />
-                  Research
-                </TabsTrigger>
-                <TabsTrigger value="settings" className="flex-1 min-w-[100px] sm:flex-none">
-                  <Settings className="h-4 w-4 mr-2" />
-                  Settings
-                </TabsTrigger>
-              </TabsList>
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+              {/* Tab Navigation Pager (Mobile Optimized) */}
+              <div className="relative group">
+                <div className="flex items-center justify-between gap-2 p-1 bg-muted/50 rounded-xl border border-border/50 backdrop-blur-sm">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-10 w-10 rounded-lg hover:bg-background/80"
+                    onClick={() => navigateTab("prev")}
+                  >
+                    <ChevronLeft className="h-5 w-5" />
+                  </Button>
+
+                  <div className="flex-1 overflow-hidden relative">
+                    <TabsList
+                      ref={tabsListRef}
+                      className="flex flex-nowrap h-10 w-full gap-1 bg-transparent justify-start overflow-x-auto no-scrollbar scroll-smooth p-0"
+                    >
+                      <TabsTrigger value="overview" className="flex-none px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-lg transition-all duration-300">
+                        <Trophy className="h-4 w-4 mr-2" />
+                        Overview
+                      </TabsTrigger>
+                      <TabsTrigger value="progress" className="flex-none px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-lg transition-all duration-300">
+                        <TrendingUp className="h-4 w-4 mr-2" />
+                        Progress
+                      </TabsTrigger>
+                      <TabsTrigger value="courses" className="flex-none px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-lg transition-all duration-300">
+                        <BookOpen className="h-4 w-4 mr-2" />
+                        Courses
+                      </TabsTrigger>
+                      <TabsTrigger value="activity" className="flex-none px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-lg transition-all duration-300">
+                        <Calendar className="h-4 w-4 mr-2" />
+                        Activity
+                      </TabsTrigger>
+                      <TabsTrigger value="compete" className="flex-none px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-lg transition-all duration-300">
+                        <Trophy className="h-4 w-4 mr-2" />
+                        Compete
+                      </TabsTrigger>
+                      <TabsTrigger value="certificates" className="flex-none px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-lg transition-all duration-300">
+                        <Award className="h-4 w-4 mr-2" />
+                        Certificates
+                      </TabsTrigger>
+                      <TabsTrigger value="research" className="flex-none px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-lg transition-all duration-300">
+                        <Database className="h-4 w-4 mr-2" />
+                        Research
+                      </TabsTrigger>
+                      <TabsTrigger value="settings" className="flex-none px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-lg transition-all duration-300">
+                        <Settings className="h-4 w-4 mr-2" />
+                        Settings
+                      </TabsTrigger>
+                    </TabsList>
+
+                    {/* Fades for better visual scroll indication */}
+                    <div className="absolute left-0 top-0 bottom-0 w-8 bg-linear-to-r from-muted/50 to-transparent pointer-events-none z-10" />
+                    <div className="absolute right-0 top-0 bottom-0 w-8 bg-linear-to-l from-muted/50 to-transparent pointer-events-none z-10" />
+                  </div>
+
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-10 w-10 rounded-lg hover:bg-background/80"
+                    onClick={() => navigateTab("next")}
+                  >
+                    <ChevronRight className="h-5 w-5" />
+                  </Button>
+                </div>
+              </div>
+
+              <style jsx global>{`
+                .no-scrollbar::-webkit-scrollbar {
+                  display: none;
+                }
+                .no-scrollbar {
+                  -ms-overflow-style: none;
+                  scrollbar-width: none;
+                }
+              `}</style>
 
               {/* Overview Tab - Gamification Dashboard */}
               <TabsContent value="overview" className="space-y-4">
