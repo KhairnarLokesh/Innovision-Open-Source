@@ -8,7 +8,7 @@ import StarRating from "./StarRating";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
-const ReviewForm = ({ courseId, existingReview, onReviewSubmitted }) => {
+const ReviewForm = ({ courseId, existingReview, onReviewSubmitted, onCancel }) => {
   const [rating, setRating] = useState(existingReview?.rating || 0);
   const [reviewText, setReviewText] = useState(existingReview?.reviewText || "");
   const [loading, setLoading] = useState(false);
@@ -101,16 +101,28 @@ const ReviewForm = ({ courseId, existingReview, onReviewSubmitted }) => {
           </div>
 
           {/* Submit Button */}
-          <Button type="submit" disabled={loading || rating === 0} className="w-full">
-            {loading ? (
-              <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                {isEditing ? "Updating..." : "Submitting..."}
-              </>
-            ) : (
-              <>{isEditing ? "Update Review" : "Submit Review"}</>
+          <div className="flex gap-2">
+            <Button type="submit" disabled={loading || rating === 0} className="flex-1">
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  {isEditing ? "Updating..." : "Submitting..."}
+                </>
+              ) : (
+                <>{isEditing ? "Update Review" : "Submit Review"}</>
+              )}
+            </Button>
+            {onCancel && (
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={onCancel}
+                disabled={loading}
+              >
+                Cancel
+              </Button>
             )}
-          </Button>
+          </div>
         </form>
       </CardContent>
     </Card>

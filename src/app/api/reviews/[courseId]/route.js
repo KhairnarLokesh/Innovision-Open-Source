@@ -6,7 +6,9 @@ export async function GET(request, { params }) {
   try {
     const { courseId } = params;
     const { searchParams } = new URL(request.url);
-    const sortBy = searchParams.get("sortBy") || "newest"; // newest, highest, lowest, helpful
+    const sortBy = searchParams.get("sortBy") || "newest";
+
+    console.log("Fetching reviews for courseId:", courseId, "sortBy:", sortBy);
 
     if (!courseId) {
       return NextResponse.json(
@@ -15,34 +17,36 @@ export async function GET(request, { params }) {
       );
     }
 
-    // Fetch reviews
-    let query = adminDb
+    // Fetch reviews - simplified query to avoid index requirements
+    const reviewsSnapshot = await adminDb
       .collection("reviews")
       .where("courseId", "==", courseId)
-      .where("reported", "==", false);
+      .get();
 
-    // Apply sorting
-    if (sortBy === "newest") {
-      query = query.orderBy("createdAt", "desc");
-    } else if (sortBy === "oldest") {
-      query = query.orderBy("createdAt", "asc");
-    } else if (sortBy === "highest") {
-      query = query.orderBy("rating", "desc");
-    } else if (sortBy === "lowest") {
-      query = query.orderBy("rating", "asc");
-    } else if (sortBy === "helpful") {
-      query = query.orderBy("helpfulCount", "desc");
-    }
-
-    const reviewsSnapshot = await query.get();
-
-    const reviews = [];
+    let reviews = [];
     reviewsSnapshot.forEach((doc) => {
-      reviews.push({
-        id: doc.id,
-        ...doc.data(),
-      });
+      const data = doc.data();
+      // Filter out reported reviews in memory
+      if (!data.reported) {
+        reviews.push({
+          id: doc.id,
+          ...data,
+        });
+      }
     });
+
+    // Apply sorting in memory (to avoid Firestore index requirements)
+    if (sortBy === "newest") {
+      reviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    } else if (sortBy === "oldest") {
+      reviews.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+    } else if (sortBy === "highest") {
+      reviews.sort((a, b) => b.rating - a.rating);
+    } else if (sortBy === "lowest") {
+      reviews.sort((a, b) => a.rating - b.rating);
+    } else if (sortBy === "helpful") {
+      reviews.sort((a, b) => (b.helpfulCount || 0) - (a.helpfulCount || 0));
+    }
 
     // Get course rating stats
     const ratingDoc = await adminDb
@@ -60,6 +64,8 @@ export async function GET(request, { params }) {
       distribution[review.rating]++;
     });
 
+    console.log("Returning reviews:", reviews.length, "stats:", ratingStats);
+
     return NextResponse.json({
       success: true,
       reviews,
@@ -71,7 +77,7 @@ export async function GET(request, { params }) {
   } catch (error) {
     console.error("Error fetching reviews:", error);
     return NextResponse.json(
-      { error: "Failed to fetch reviews" },
+      { error: "Failed to fetch reviews", details: error.message },
       { status: 500 }
     );
   }

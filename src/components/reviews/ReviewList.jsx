@@ -33,7 +33,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/contexts/auth";
 import { formatDistanceToNow } from "date-fns";
 
-const ReviewList = ({ courseId, onEditReview }) => {
+const ReviewList = ({ courseId, onEditReview, onReviewDeleted, onReviewsUpdated, refreshTrigger }) => {
   const [reviews, setReviews] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -47,7 +47,7 @@ const ReviewList = ({ courseId, onEditReview }) => {
 
   useEffect(() => {
     fetchReviews();
-  }, [courseId, sortBy]);
+  }, [courseId, sortBy, refreshTrigger]);
 
   const fetchReviews = async () => {
     setLoading(true);
@@ -55,11 +55,14 @@ const ReviewList = ({ courseId, onEditReview }) => {
       const response = await fetch(`/api/reviews/${courseId}?sortBy=${sortBy}`);
       const data = await response.json();
 
+      console.log("Reviews API response:", response.status, data);
+
       if (response.ok) {
         setReviews(data.reviews || []);
         setStats(data.stats || null);
       } else {
-        toast.error("Failed to load reviews");
+        console.error("Failed to load reviews:", data);
+        toast.error(data.error || "Failed to load reviews");
       }
     } catch (error) {
       console.error("Error fetching reviews:", error);
@@ -98,6 +101,9 @@ const ReviewList = ({ courseId, onEditReview }) => {
           )
         );
         toast.success("Vote recorded");
+        if (onReviewsUpdated) {
+          onReviewsUpdated();
+        }
       } else {
         toast.error(data.error || "Failed to vote");
       }
@@ -123,6 +129,9 @@ const ReviewList = ({ courseId, onEditReview }) => {
         setReviews((prev) => prev.filter((r) => r.id !== selectedReview.id));
         setDeleteDialogOpen(false);
         setSelectedReview(null);
+        if (onReviewDeleted) {
+          onReviewDeleted();
+        }
       } else {
         toast.error(data.error || "Failed to delete review");
       }
