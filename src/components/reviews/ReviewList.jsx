@@ -52,7 +52,7 @@ const ReviewList = ({ courseId, onEditReview, onReviewDeleted, onReviewsUpdated,
   const fetchReviews = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/reviews/${courseId}?sortBy=${sortBy}`);
+      const response = await fetch(`/api/reviews?courseId=${courseId}&sortBy=${sortBy}`);
       const data = await response.json();
 
       console.log("Reviews API response:", response.status, data);
@@ -93,10 +93,10 @@ const ReviewList = ({ courseId, onEditReview, onReviewDeleted, onReviewsUpdated,
           prev.map((review) =>
             review.id === reviewId
               ? {
-                  ...review,
-                  helpfulCount: data.helpfulCount,
-                  notHelpfulCount: data.notHelpfulCount,
-                }
+                ...review,
+                helpfulCount: data.helpfulCount,
+                notHelpfulCount: data.notHelpfulCount,
+              }
               : review
           )
         );
@@ -205,11 +205,10 @@ const ReviewList = ({ courseId, onEditReview, onReviewDeleted, onReviewsUpdated,
                       <div
                         className="h-full bg-yellow-400"
                         style={{
-                          width: `${
-                            stats.totalReviews > 0
+                          width: `${stats.totalReviews > 0
                               ? (stats.distribution[star] / stats.totalReviews) * 100
                               : 0
-                          }%`,
+                            }%`,
                         }}
                       />
                     </div>

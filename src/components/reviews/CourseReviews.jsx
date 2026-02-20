@@ -20,7 +20,7 @@ const CourseReviews = ({ courseId }) => {
 
   const fetchUserReview = async () => {
     try {
-      const response = await fetch(`/api/reviews/${courseId}`);
+      const response = await fetch(`/api/reviews?courseId=${courseId}`);
       const data = await response.json();
 
       if (response.ok && data.reviews) {
@@ -89,9 +89,9 @@ const CourseReviews = ({ courseId }) => {
       )}
 
       {/* Reviews List */}
-      <ReviewList 
+      <ReviewList
         key={refreshKey}
-        courseId={courseId} 
+        courseId={courseId}
         onEditReview={handleEditReview}
         onReviewDeleted={handleReviewDeleted}
         onReviewsUpdated={fetchUserReview}
