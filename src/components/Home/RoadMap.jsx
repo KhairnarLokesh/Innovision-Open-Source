@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { loader } from "@/components/ui/Custom/ToastLoader";
 import { useRouter } from "next/navigation";
 import ExportCourse from "@/components/export/ExportCourse";
+import ShareCourse from "@/components/share/ShareCourse";
 
 function Roadmap({ roadMap, id }) {
   const [height, setHeight] = useState((roadMap.chapters.length - 1) * 34 * 4);
@@ -92,6 +93,11 @@ function Roadmap({ roadMap, id }) {
             <ExportCourse
               courseId={id}
               courseTitle={roadMap.courseTitle}
+            <ShareCourse
+              courseId={id}
+              courseTitle={roadMap.courseTitle}
+              userId={user?.email}
+              isPublic={roadMap.isPublic || false}
             />
             <Button
               variant="outline"
