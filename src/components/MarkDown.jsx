@@ -36,8 +36,8 @@ const CopyButton = ({ code, theme }) => {
         ${copied
           ? "bg-green-500/20 text-green-400"
           : theme === "dark"
-          ? "bg-gray-700/50 text-gray-400 hover:bg-gray-600/50 hover:text-gray-200"
-          : "bg-gray-300/50 text-gray-600 hover:bg-gray-400/50 hover:text-gray-800"
+            ? "bg-gray-700/50 text-gray-400 hover:bg-gray-600/50 hover:text-gray-200"
+            : "bg-gray-300/50 text-gray-600 hover:bg-gray-400/50 hover:text-gray-800"
         }
       `}
       title={copied ? "Copied!" : "Copy code"}
@@ -90,6 +90,67 @@ const MarkDown = ({ content }) => {
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
       components={{
+        blockquote({ node, children }) {
+          // Check for GitHub-style callouts like [!NOTE], [!TIP], etc.
+          const content = React.Children.toArray(children);
+          const firstChild = content[0];
+
+          if (typeof firstChild?.props?.children?.[0] === 'string') {
+            const text = firstChild.props.children[0];
+            const match = text.match(/^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]/i);
+
+            if (match) {
+              const type = match[1].toUpperCase();
+              const remainingContent = [...content];
+
+              // Remove the [!TYPE] prefix from the first child
+              remainingContent[0] = React.cloneElement(firstChild, {
+                children: [text.replace(/^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]/i, '').trim(), ...firstChild.props.children.slice(1)]
+              });
+
+              const styles = {
+                NOTE: "border-blue-500 bg-blue-500/5 text-blue-700 dark:text-blue-300",
+                TIP: "border-green-500 bg-green-500/5 text-green-700 dark:text-green-300",
+                IMPORTANT: "border-purple-500 bg-purple-500/5 text-purple-700 dark:text-purple-300",
+                WARNING: "border-yellow-500 bg-yellow-500/5 text-yellow-700 dark:text-yellow-300",
+                CAUTION: "border-red-500 bg-red-500/5 text-red-700 dark:text-red-300"
+              };
+
+              return (
+                <div className={`my-6 p-4 border-l-4 rounded-r-lg ${styles[type] || styles.NOTE}`}>
+                  <div className="font-bold text-xs uppercase mb-2 flex items-center gap-2">
+                    {type === "NOTE" && <span className="w-2 h-2 rounded-full bg-blue-500" />}
+                    {type === "TIP" && <span className="w-2 h-2 rounded-full bg-green-500" />}
+                    {type === "IMPORTANT" && <span className="w-2 h-2 rounded-full bg-purple-500" />}
+                    {match[1]}
+                  </div>
+                  <div className="text-sm leading-relaxed">{remainingContent}</div>
+                </div>
+              );
+            }
+          }
+
+          return (
+            <blockquote className="border-l-4 border-muted pl-4 my-6 italic text-muted-foreground">
+              {children}
+            </blockquote>
+          );
+        },
+        h2({ children }) {
+          return (
+            <h2 className="text-2xl font-bold mt-12 mb-6 pb-2 border-b border-border/50 flex items-center gap-3 group">
+              <span className="w-1.5 h-6 bg-primary rounded-full" />
+              {children}
+            </h2>
+          );
+        },
+        h3({ children }) {
+          return (
+            <h3 className="text-xl font-semibold mt-8 mb-4 text-foreground/90">
+              {children}
+            </h3>
+          );
+        },
         code({ node, inline, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || "");
           const codeString = String(children).trim();
@@ -97,11 +158,10 @@ const MarkDown = ({ content }) => {
           return !inline && match ? (
             <div className="relative group my-4">
               {/* Language badge */}
-              <div className={`absolute top-0 left-0 px-3 py-1 text-xs font-medium rounded-tl-md rounded-br-md ${
-                theme === "dark" 
-                  ? "text-gray-400 bg-gray-800" 
+              <div className={`absolute top-0 left-0 px-3 py-1 text-xs font-medium rounded-tl-md rounded-br-md ${theme === "dark"
+                  ? "text-gray-400 bg-gray-800"
                   : "text-gray-600 bg-gray-200"
-              }`}>
+                }`}>
                 {match[1]}
               </div>
 

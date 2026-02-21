@@ -1,53 +1,58 @@
-
-
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-const MAX_INPUT_CHARS = 100000; 
-const MIN_CHAPTER_LENGTH = 200; 
+const MAX_INPUT_CHARS = 100000;
+const MIN_CHAPTER_LENGTH = 200;
 
 export async function chunkContentWithAI(text, fileName) {
-   
+
     const truncatedText =
         text.length > MAX_INPUT_CHARS ? text.slice(0, MAX_INPUT_CHARS) : text;
 
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-    const prompt = `You are an expert educational content organizer. Analyze the following text extracted from a document titled "${fileName}" and break it into logical chapters for a structured course.
+    const prompt = `You are a world-class curriculum designer and educational content architect. 
+Your goal is to transform raw, extracted text into a "Premium Digital Learning Experience". 
+
+TEXT SOURCE: "${fileName}"
+---
+${truncatedText}
+---
 
 INSTRUCTIONS:
-1. Identify natural topic boundaries and section breaks
-2. Create 3-15 chapters depending on content length
-3. Each chapter should cover a coherent topic or concept
-4. Generate a clear, descriptive title for each chapter
-5. Write a brief 1-2 sentence summary for each chapter
-6. Do NOT modify the original text content - only organize it into chapters
-7. Ensure no content is lost - all text should be included in some chapter
-8. If the text is short, create fewer chapters (minimum 2)
+1. **Educational Decomposition**: Break the text into 3-15 logically sequential chapters. Do not just follow the original order if it's confusing; create a logical learning path.
+2. **The "Innovision" Style (STRICT MARKDOWN)**:
+   - **H2 for Main Sections**: Start each major sub-topic with an H2 (##).
+   - **H3 for Concepts**: Use H3 (###) for specific concepts within sections.
+   - **Callout Boxes (Using Blockquotes)**: 
+     - Use \`> [!NOTE]\` for background context.
+     - Use \`> [!TIP]\` for practical applications.
+     - Use \`> [!IMPORTANT]\` for critical concepts.
+   - **Visual Spacing**: Use ample white space between paragraphs.
+   - **Mental Models**: Where applicable, rephrase complex sections into "Mental Models" or analogies.
+   - **Key Terms**: Bold (**term**) new or critical vocabulary upon first mention.
+   - **Checklists/Lists**: Use bulleted and numbered lists extensively to avoid "walls of text".
+3. **Refine, Don't Copy**: You are NOT a copier. You are an editor. Fix grammatical errors in the source, improve the flow, and ensure an engaging, instructional tone throughout.
+4. **Learning Objectives**: The "summary" field for each chapter must be written as: "In this chapter, you will learn [point 1], [point 2], and [point 3]."
 
-Return your response as a valid JSON array with this exact format:
+Return your response as a valid JSON array:
 [
   {
     "chapterNumber": 1,
-    "title": "Chapter Title Here",
-    "summary": "Brief summary of what this chapter covers.",
-    "content": "The actual text content for this chapter..."
+    "title": "Mastery Title: [Topic Name]",
+    "summary": "In this chapter, you will learn...",
+    "content": "Full, beautifully formatted Markdown content here..."
   }
 ]
 
-IMPORTANT: Return ONLY the JSON array, no other text, no markdown code fences.
-
-TEXT TO ORGANIZE:
----
-${truncatedText}
----`;
+IMPORTANT: NO MARKDOWN WRAPPERS AROUND THE JSON. RETURN PURE JSON.`;
 
     try {
         const result = await model.generateContent(prompt);
         const response = result.response.text();
 
-       
+
         let cleanedResponse = response.trim();
         if (cleanedResponse.startsWith("```")) {
             cleanedResponse = cleanedResponse
