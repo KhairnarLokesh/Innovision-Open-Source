@@ -18,6 +18,30 @@ export default function Quiz({ task, roadmapId, chapterNumber, onCourseComplete 
   const [submitting, setSubmitting] = useState(false);
   const { getXp, awardXP, combo, incrementCombo, resetCombo, getCurrentMultiplier } = useContext(xpContext);
 
+  // Debug log to check task structure
+  useEffect(() => {
+    if (!Array.isArray(task.options) || task.options.length === 0) {
+      console.error("Quiz task has invalid options:");
+      console.error("Task object:", JSON.stringify(task, null, 2));
+      console.error("Options value:", task.options);
+      console.error("Options type:", typeof task.options);
+    }
+  }, [task]);
+
+  // Convert options object to array if needed
+  const optionsArray = Array.isArray(task.options) 
+    ? task.options 
+    : task.options && typeof task.options === 'object'
+    ? Object.values(task.options)
+    : [];
+
+  // Get the correct answer value (handle both array and object formats)
+  const correctAnswer = Array.isArray(task.options)
+    ? task.answer
+    : task.options && typeof task.options === 'object' && task.answer
+    ? task.options[task.answer]
+    : task.answer;
+
   const handleOptionSelect = (value) => {
     if (isAnswered) return;
     setSelectedOption(value);
@@ -25,7 +49,7 @@ export default function Quiz({ task, roadmapId, chapterNumber, onCourseComplete 
 
   const checkAnswer = async () => {
     setSubmitting(true);
-    const correct = selectedOption === task.answer;
+    const correct = selectedOption === correctAnswer;
 
     try {
       const res = await fetch(`/api/tasks`, {
@@ -105,13 +129,20 @@ export default function Quiz({ task, roadmapId, chapterNumber, onCourseComplete 
             <h2 className="mb-0 text-lg ">Question</h2>
             <h3 className="text-lg select-none">{task.question || task.content}</h3>
             <RadioGroup value={selectedOption} className="space-y-3 text-sm">
-              {task.options.map((option) => (
+              {!optionsArray || optionsArray.length === 0 ? (
+                <div className="p-4 border-2 border-yellow-500/50 bg-yellow-50 dark:bg-yellow-950/20 rounded-lg">
+                  <p className="text-sm text-yellow-700 dark:text-yellow-400">
+                    No answer options available for this question. Please contact support or try regenerating the quiz.
+                  </p>
+                </div>
+              ) : (
+                optionsArray.map((option) => (
                 <div
                   key={option}
                   className={`flex items-center space-x-2 rounded-lg border-2 p-4 transition-all duration-200 ${isAnswered
-                    ? option === task.answer
+                    ? option === correctAnswer
                       ? "border-green-500 dark:bg-green-950/30 bg-green-50"
-                      : option === selectedOption && option !== task.answer
+                      : option === selectedOption && option !== correctAnswer
                         ? "border-red-500 dark:bg-red-950/30 bg-red-50"
                         : "border-gray-200 opacity-70"
                     : option === selectedOption
@@ -128,13 +159,13 @@ export default function Quiz({ task, roadmapId, chapterNumber, onCourseComplete 
                       checked={selectedOption === option}
                       className="sr-only  text-sm"
                     />
-                    {isAnswered && option === task.answer ? (
+                    {isAnswered && option === correctAnswer ? (
                       <CheckCircle className="h-6 w-6 text-green-500" />
-                    ) : isAnswered && option === selectedOption && option !== task.answer ? (
+                    ) : isAnswered && option === selectedOption && option !== correctAnswer ? (
                       <XCircle className="h-6 w-6 text-red-500" />
                     ) : (
                       <span className="text-base font-medium">
-                        {String.fromCharCode(65 + task.options.indexOf(option))}
+                        {String.fromCharCode(65 + optionsArray.indexOf(option))}
                       </span>
                     )}
                   </div>
@@ -142,7 +173,7 @@ export default function Quiz({ task, roadmapId, chapterNumber, onCourseComplete 
                     {option}
                   </Label>
                 </div>
-              ))}
+              )))}
             </RadioGroup>
           </div>
 
@@ -159,7 +190,7 @@ export default function Quiz({ task, roadmapId, chapterNumber, onCourseComplete 
                 <div>
                   <div className="font-semibold">{isCorrect ? "Correct!" : "Incorrect!"}</div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
-                    {isCorrect ? "Great job!" : `The correct answer is: ${task.answer}`}
+                    {isCorrect ? "Great job!" : `The correct answer is: ${correctAnswer}`}
                   </div>
                 </div>
               </div>

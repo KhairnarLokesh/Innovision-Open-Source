@@ -13,8 +13,9 @@ import {
 import { nanoid } from "nanoid";
 
 export async function POST(request) {
+  let body;
   try {
-    const body = await request.json();
+    body = await request.json();
     const { userId, courseId } = body;
 
     // Guard: both fields required
@@ -148,10 +149,67 @@ export async function POST(request) {
       },
     });
   } catch (error) {
-    console.error("Error generating certificate:", error);
+    // Enhanced error logging with context
+    console.error("Certificate generation error:", {
+      operation: "certificate_generation",
+      userId: body?.userId,
+      courseId: body?.courseId,
+      errorType: error.code || error.name || "UnknownError",
+      errorMessage: error.message,
+      errorStack: error.stack,
+    });
+
+    // Detect specific error types and return appropriate responses
+    let errorType = "ServerError";
+    let errorMessage = "Failed to generate certificate";
+    let statusCode = 500;
+    let details = error.message;
+
+    // Firestore-specific errors
+    if (error.code) {
+      if (error.code === "permission-denied") {
+        errorType = "PermissionDenied";
+        errorMessage = "Permission denied accessing database";
+        statusCode = 403;
+        details = "You don't have permission to access this resource";
+      } else if (error.code === "not-found") {
+        errorType = "NotFound";
+        errorMessage = "Resource not found";
+        statusCode = 404;
+        details = "The requested resource could not be found";
+      } else if (error.code === "unavailable" || error.code === "deadline-exceeded") {
+        errorType = "DatabaseTimeout";
+        errorMessage = "Database connection timeout";
+        statusCode = 503;
+        details = "Database is temporarily unavailable. Please try again.";
+      } else if (error.code === "failed-precondition" || error.code === "aborted") {
+        errorType = "DatabaseError";
+        errorMessage = "Database operation failed";
+        statusCode = 500;
+        details = "A database error occurred. Please try again.";
+      }
+    }
+
+    // Missing or invalid data errors
+    if (error.message && (
+      error.message.includes("undefined") ||
+      error.message.includes("null") ||
+      error.message.includes("Cannot read")
+    )) {
+      errorType = "InvalidData";
+      errorMessage = "Invalid or missing data";
+      statusCode = 500;
+      details = "Required data is missing or invalid. Please try again.";
+    }
+
     return NextResponse.json(
-      { success: false, error: "Failed to generate certificate" },
-      { status: 500 }
+      {
+        success: false,
+        error: errorMessage,
+        errorType,
+        details,
+      },
+      { status: statusCode }
     );
   }
 }
