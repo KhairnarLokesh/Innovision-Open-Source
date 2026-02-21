@@ -33,6 +33,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import DesktopNav from "./DesktopNav";
 import MobileMenu from "./MobileMenu";
 import UserMenu from "./UserMenu";
+import NotificationBell from "./NotificationBell";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -234,6 +235,9 @@ const Navbar = () => {
                 </Tooltip>
               </>
             )}
+
+
+            {user && <NotificationBell />}
 
             {/* Theme Toggle - Always visible */}
             <Button variant="ghost" size="icon" onClick={toggleTheme} className="h-8 w-8 sm:h-9 sm:w-9 rounded-full hover:bg-muted text-foreground">
