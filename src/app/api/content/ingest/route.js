@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { ingestContent } from "@/lib/ingestion-service";
 import { detectFileType } from "@/lib/text-extractor";
+import { createNotification } from "@/lib/create-notification";
+import { getAdminDb } from "@/lib/firebase-admin";
 
 export async function POST(request) {
   try {
@@ -13,7 +15,6 @@ export async function POST(request) {
         const { getAuth } = await import("firebase-admin/auth");
         const token = authHeader.replace("Bearer ", "");
         const decoded = await getAuth().verifyIdToken(token);
-        // Use email consistently (matches how other parts of the app identify users)
         userId = decoded.email || decoded.uid;
       }
     } catch (authError) {
@@ -51,6 +52,17 @@ export async function POST(request) {
 
     // Run ingestion pipeline
     const result = await ingestContent(buffer, file.name, fileSize, userId);
+
+    if (userId && userId !== "anonymous") {
+      const adminDb = getAdminDb();
+      createNotification(adminDb, {
+        userId,
+        title: "Course Created from File!",
+        body: `"${result.title}" with ${result.chapterCount} chapters is ready to explore.`,
+        type: "progress",
+        link: `/content-ingestion/${result.courseId}`,
+      }).catch(() => { });
+    }
 
     return NextResponse.json({
       success: true,
