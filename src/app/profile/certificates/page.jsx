@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/auth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Award, Download, Share2, Eye } from "lucide-react";
+import { Award, Eye } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
