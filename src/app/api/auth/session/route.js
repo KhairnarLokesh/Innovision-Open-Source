@@ -32,7 +32,7 @@ export async function POST(req) {
             title: "Welcome back!",
             body: `You signed in at ${timeStr}. Ready to keep learning?`,
             type: "system",
-            link: "/roadmap",
+            link: "/profile",
           }).catch(() => { });
         }
       } catch (_) { }
