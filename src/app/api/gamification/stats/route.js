@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
+import { createNotification } from "@/lib/create-notification";
 
 export async function GET(request) {
   try {
@@ -166,6 +167,39 @@ export async function POST(request) {
     };
 
     await userRef.update(updates);
+
+    // Fire notifications for new badges and level-ups
+    if (adminDb && userId) {
+      if (newBadges.length > 0) {
+        for (const badge of newBadges) {
+          createNotification(adminDb, {
+            userId,
+            title: "New Badge Unlocked!",
+            body: `You earned the "${badge.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())}" badge.`,
+            type: "achievement",
+            link: "/gamification",
+          }).catch(() => { });
+        }
+      }
+      if (newLevel > stats.level) {
+        createNotification(adminDb, {
+          userId,
+          title: `Level Up! You're now Level ${newLevel}`,
+          body: `Awesome work! You've reached Level ${newLevel} with ${newXP} XP.`,
+          type: "achievement",
+          link: "/gamification",
+        }).catch(() => { });
+      }
+      if (action === "generate_course") {
+        createNotification(adminDb, {
+          userId,
+          title: "New AI Course Created!",
+          body: "Your AI-generated course is ready. Start learning!",
+          type: "progress",
+          link: "/roadmap",
+        }).catch(() => { });
+      }
+    }
 
     return NextResponse.json({
       success: true,

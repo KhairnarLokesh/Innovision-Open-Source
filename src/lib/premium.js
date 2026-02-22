@@ -306,6 +306,21 @@ export async function activatePremium(userEmail, durationMonths = 1, paymentId) 
       { merge: true }
     );
 
+    // Send a notification to the user about their premium subscription
+    try {
+      const { createNotification } = await import("@/lib/create-notification");
+      await createNotification(db, {
+        userId: userEmail,
+        title: "Premium Subscription Activated! 🚀",
+        body: "Congratulations! You are now a premium member. Enjoy unlimited course generation and all premium features.",
+        type: "premium",
+        link: "/premium",
+      });
+    } catch (notifError) {
+      console.error("Failed to create premium notification:", notifError);
+      // Non-blocking: premium is still activated even if notification fails
+    }
+
     return true;
   } catch (error) {
     console.error("Error activating premium:", error);
