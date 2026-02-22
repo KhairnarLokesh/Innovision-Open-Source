@@ -95,7 +95,7 @@ export default function CodeEditor() {
   };
 
   return (
-    <div className="min-h-screen bg-background p-6 relative">
+    <div className="min-h-screen bg-background my-10 p-6 relative">
       <PageBackground />
       <GridPattern opacity={0.02} />
 
@@ -110,7 +110,7 @@ export default function CodeEditor() {
 
         {!premiumStatus.isPremium && (
           <ScrollReveal delay={100}>
-            <div className="mb-6 p-4 bg-linear-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-xl backdrop-blur-sm">
+            <div className="mb-6 p-5 bg-linear-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-xl backdrop-blur-sm">
               <div className="flex items-start gap-3">
                 <div className="shrink-0 w-10 h-10 bg-linear-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg shadow-yellow-500/25">
                   <Crown className="h-5 w-5 text-black" />

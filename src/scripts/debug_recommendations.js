@@ -45,8 +45,8 @@ async function debugData() {
     const roadmapsSnap = await db.collection("roadmaps").get();
     console.log(`Count: ${roadmapsSnap.size}`);
     roadmapsSnap.docs.slice(0, 5).forEach(doc => {
-        const data = doc.data();
-        console.log(`- [${doc.id}] ${data.courseTitle || data.title}`);
+      const data = doc.data();
+      console.log(`- [${doc.id}] ${data.courseTitle || data.title}`);
     });
 
     // Check a specific user if possible (Vishal Raut)
@@ -54,11 +54,11 @@ async function debugData() {
     console.log("\n--- Checking users ---");
     const usersSnap = await db.collection("users").get();
     for (const doc of usersSnap.docs) {
-        console.log(`User: ${doc.id}`);
-        // Check their roadmaps
-        const userRoadmaps = await db.collection("users").doc(doc.id).collection("roadmaps").get();
-        console.log(`  Roadmaps: ${userRoadmaps.size}`);
-        userRoadmaps.docs.forEach(r => console.log(`    - ${r.data().courseTitle}`));
+      console.log(`User: ${doc.id}`);
+      // Check their roadmaps
+      const userRoadmaps = await db.collection("users").doc(doc.id).collection("roadmaps").get();
+      console.log(`  Roadmaps: ${userRoadmaps.size}`);
+      userRoadmaps.docs.forEach(r => console.log(`    - ${r.data().courseTitle}`));
     }
 
   } catch (error) {

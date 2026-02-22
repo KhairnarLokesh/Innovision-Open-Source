@@ -478,7 +478,7 @@ export default function TemplateSelector({ onSelect }) {
             return (
               <Card
                 key={template.id}
-                className="cursor-pointer hover:border-blue-400 transition-all"
+                className="cursor-pointer hover:border-blue-400 transition-all flex flex-col justify-between space-y-2"
                 onClick={() => onSelect(template)}
               >
                 <CardHeader>

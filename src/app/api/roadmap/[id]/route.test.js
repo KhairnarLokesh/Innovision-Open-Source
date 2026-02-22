@@ -56,7 +56,7 @@ describe('DELETE /api/roadmap/[id] - Bug Condition Exploration', () => {
     const mockSession = { user: { email: 'test@example.com' } };
     const mockCourseId = 'course123';
     const mockCourseData = { title: 'Test Course', description: 'Test' };
-    
+
     const mockDelete = vi.fn().mockResolvedValue();
     const mockGet = vi.fn().mockResolvedValue({
       exists: true,
@@ -97,7 +97,7 @@ describe('DELETE /api/roadmap/[id] - Bug Condition Exploration', () => {
     // Arrange
     const mockSession = { user: { email: 'test@example.com' } };
     const mockCourseId = 'nonexistent';
-    
+
     const mockGet = vi.fn().mockResolvedValue({
       exists: false,
     });
@@ -197,11 +197,11 @@ describe('GET /api/roadmap/[id] - Preservation Property Tests', () => {
         async ({ email, courseId, title, description }) => {
           // Clear mocks before each property test run
           vi.clearAllMocks();
-          
+
           // Arrange
           const mockSession = { user: { email } };
           const mockCourseData = { title, description };
-          
+
           const mockGet = vi.fn().mockResolvedValue({
             exists: true,
             data: () => mockCourseData,
@@ -251,10 +251,10 @@ describe('GET /api/roadmap/[id] - Preservation Property Tests', () => {
         async ({ email, courseId }) => {
           // Clear mocks before each property test run
           vi.clearAllMocks();
-          
+
           // Arrange
           const mockSession = { user: { email } };
-          
+
           const mockGet = vi.fn().mockResolvedValue({
             exists: false,
           });
@@ -297,7 +297,7 @@ describe('GET /api/roadmap/[id] - Preservation Property Tests', () => {
         async (courseId) => {
           // Clear mocks before each property test run
           vi.clearAllMocks();
-          
+
           // Arrange
           getServerSession.mockResolvedValue(null);
 
@@ -326,7 +326,7 @@ describe('GET /api/roadmap/[id] - Preservation Property Tests', () => {
         async (email) => {
           // Clear mocks before each property test run
           vi.clearAllMocks();
-          
+
           // Arrange
           const mockSession = { user: { email } };
           getServerSession.mockResolvedValue(mockSession);
@@ -359,10 +359,10 @@ describe('GET /api/roadmap/[id] - Preservation Property Tests', () => {
         async ({ email, courseId }) => {
           // Clear mocks before each property test run
           vi.clearAllMocks();
-          
+
           // Arrange
           const mockSession = { user: { email } };
-          
+
           const mockGet = vi.fn().mockRejectedValue(new Error('Firestore error'));
           const mockDoc = vi.fn().mockReturnValue({
             get: mockGet,

@@ -111,7 +111,7 @@ const RecommendedCourses = ({ query = "" }) => {
                 <div className="p-10 border-2 border-dashed border-blue-500/10 rounded-xl bg-blue-500/5 flex flex-col items-center justify-center text-center">
                     <BookOpen className="h-8 w-8 text-blue-500/20 mb-3" />
                     <p className="text-sm font-medium text-muted-foreground">Looking for something new?</p>
-                    <p className="text-xs text-muted-foreground/60 max-w-[200px] mt-1">
+                    <p className="text-xs text-muted-foreground/60 max-w-50 mt-1">
                         Publish some courses in the library or start a new roadmap to see AI suggestions.
                     </p>
                 </div>

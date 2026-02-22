@@ -68,15 +68,15 @@ export function formatTime(minutes) {
  */
 export function getTimeEstimateWithColor(chapterCount, difficulty = "balanced") {
   const time = calculateEstimatedTime(chapterCount, difficulty);
-  
+
   // Determine color based on time commitment
   let color = "text-green-500"; // Short courses
-  
+
   if (time.includes("day") || time.includes("week")) {
     color = "text-yellow-500"; // Medium courses
   } else if (time.includes("month")) {
     color = "text-orange-500"; // Long courses
   }
-  
+
   return { time, color };
 }

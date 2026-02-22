@@ -222,7 +222,7 @@ export default function StudioPage() {
 
           {!premiumStatus.isPremium && (
             <ScrollReveal delay={100}>
-              <div className="mb-6 p-4 bg-linear-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-xl backdrop-blur-sm">
+              <div className="mb-6 p-5 bg-linear-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-xl backdrop-blur-sm">
                 <div className="flex items-start gap-3">
                   <div className="shrink-0 w-10 h-10 bg-linear-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg shadow-yellow-500/25">
                     <Crown className="h-5 w-5 text-black" />
@@ -249,7 +249,7 @@ export default function StudioPage() {
             <div className="lg:col-span-1 space-y-4">
               <Card>
                 <CardHeader>
-                  <CardTitle>Course Details</CardTitle>
+                  <CardTitle className="text-xl">Course Details</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
@@ -258,6 +258,7 @@ export default function StudioPage() {
                       value={courseTitle}
                       onChange={(e) => setCourseTitle(e.target.value)}
                       placeholder="Enter course title"
+                      className="mt-2"
                     />
                   </div>
                   <div>
@@ -266,11 +267,11 @@ export default function StudioPage() {
                       value={courseDescription}
                       onChange={(e) => setCourseDescription(e.target.value)}
                       placeholder="Course description"
-                      className="w-full min-h-25 p-2 border rounded-md"
+                      className="w-full min-h-25 p-2 border rounded-md mt-2"
                     />
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-2.5 pt-2">
                     <Button onClick={addChapter} className="w-full" variant="outline">
                       <Plus className="h-4 w-4 mr-2" />
                       Add Chapter

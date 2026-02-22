@@ -35,7 +35,7 @@ const ArchiveCourse = ({ id, courseTitle, isArchived = false, onArchive }) => {
       if (response.ok) {
         toast.success(data.message || `Course ${isArchived ? 'unarchived' : 'archived'} successfully!`);
         hideLoader();
-        
+
         // Refresh the course list after a short delay to ensure DB is updated
         setTimeout(() => {
           console.log("Refreshing course list...");

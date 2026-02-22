@@ -519,7 +519,7 @@ Return valid JSON only.`;
           <p className="text-sm text-muted-foreground">This may take a moment...</p>
         </div>
       )}
-      <div className="mx-auto max-w-3xl pt-4 relative z-10">
+      <div className="mx-auto max-w-3xl py-10 relative z-10">
         <ScrollReveal>
           <div className="mb-8 text-center flex flex-col items-center justify-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-sm font-medium mb-4">
@@ -567,7 +567,7 @@ Return valid JSON only.`;
                           <FormDescription>What main topic would you like to learn?</FormDescription>
                           <FormControl>
                             <Input
-                              className={"focus-visible:ring-blue-200 focus-visible:border-blue-400 bg-background/50"}
+                              className={"focus-visible:ring-blue-200 focus-visible:border-blue-400 bg-background/50 mt-2"}
                               placeholder="e.g., Trigonometry, Web development"
                               {...field}
                             />
@@ -587,10 +587,10 @@ Return valid JSON only.`;
                               selectedValue={field.value}
                               onSelect={field.onChange}
                               title={
-                                <>
+                                <div className="mb-3">
                                   <GraduationCap className="h-4 w-4 inline-block mr-2" />
                                   Current Knowledge Level
-                                </>
+                                </div>
                               }
                             />
                           </FormItem>
@@ -637,10 +637,10 @@ Return valid JSON only.`;
                               selectedValue={field.value}
                               onSelect={field.onChange}
                               title={
-                                <>
+                                <div className="mb-3">
                                   <Flag className="h-4 w-4 inline-block mr-2" />
                                   Preferred Difficulty Level
-                                </>
+                                </div>
                               }
                             />
                           </FormItem>
@@ -687,7 +687,7 @@ Return valid JSON only.`;
             <TabsContent value="curriculum">
               <Card className="p-6 border-0 shadow-none">
                 {!premiumStatus.isPremium && (
-                  <div className="mb-6 p-4 bg-linear-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-lg">
+                  <div className="mb-6 p-5 bg-linear-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-lg">
                     <div className="flex items-start gap-3">
                       <div className="shrink-0 w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center">
                         <span className="text-black font-bold text-lg">★</span>
@@ -794,7 +794,7 @@ Return valid JSON only.`;
                   {/* Subject Selection */}
                   <div>
                     <label className="text-sm font-medium">Select Subject</label>
-                    <p className="text-xs text-muted-foreground mb-2">Choose from available subjects</p>
+                    <p className="text-xs text-muted-foreground mb-4">Choose from available subjects</p>
                     {!curriculumData.classLevel || !curriculumData.board ? (
                       <div className="text-center py-8 border rounded-lg bg-muted/20">
                         <p className="text-sm text-muted-foreground">Select class and board to view subjects</p>
@@ -840,7 +840,7 @@ Return valid JSON only.`;
 
                   <div>
                     <label className="text-sm font-medium">Topics to Cover</label>
-                    <p className="text-xs text-muted-foreground mb-3">Define the topics for this subject</p>
+                    <p className="text-xs text-muted-foreground mb-5">Define the topics for this subject</p>
                     <div className="space-y-2">
                       {curriculumData.topics.map((topic, index) => (
                         <div key={index} className="flex gap-2">
@@ -878,7 +878,7 @@ Return valid JSON only.`;
             <TabsContent value="engineering">
               <Card className="p-6 border-0 shadow-none">
                 {!premiumStatus.isPremium && (
-                  <div className="mb-6 p-4 bg-linear-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-lg">
+                  <div className="mb-6 p-5 bg-linear-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-lg">
                     <div className="flex items-start gap-3">
                       <div className="shrink-0 w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center">
                         <span className="text-black font-bold text-lg">★</span>
@@ -987,7 +987,7 @@ Return valid JSON only.`;
                   {/* Subject Selection */}
                   <div>
                     <label className="text-sm font-medium">Select Subject</label>
-                    <p className="text-xs text-muted-foreground mb-2">Choose from available subjects</p>
+                    <p className="text-xs text-muted-foreground mb-4">Choose from available subjects</p>
                     {!engineeringData.branch || !engineeringData.semester ? (
                       <div className="text-center py-8 border rounded-lg bg-muted/20">
                         <p className="text-sm text-muted-foreground">Select branch and semester to view subjects</p>
@@ -1022,7 +1022,7 @@ Return valid JSON only.`;
                   {/* Modules Section */}
                   <div>
                     <label className="text-sm font-medium">Course Modules</label>
-                    <p className="text-xs text-muted-foreground mb-3">Define the topics/modules for this subject</p>
+                    <p className="text-xs text-muted-foreground mb-5">Define the topics/modules for this subject</p>
                     <div className="space-y-2">
                       {engineeringData.modules.map((module, index) => (
                         <div key={index} className="flex gap-2">

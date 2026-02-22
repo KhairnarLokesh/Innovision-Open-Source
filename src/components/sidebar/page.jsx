@@ -263,7 +263,7 @@ export default function Sidebar({ roadmap, id, isStudioCourse, courseId, courseT
                             className={cn(
                                 "w-full gap-2 transition-all",
                                 roadmap?.completed
-                                    ? "bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-white"
+                                    ? "bg-linear-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-white"
                                     : "opacity-60 cursor-not-allowed"
                             )}
                         >

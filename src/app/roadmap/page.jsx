@@ -226,7 +226,7 @@ export default function page() {
             <PageBackground variant="courses" />
             <GridPattern opacity={0.02} />
 
-            <div className="max-w-6xl flex flex-col gap-4 items-center p-4 mb-16 mx-auto relative z-10">
+            <div className="max-w-6xl flex flex-col gap-4 items-center p-4 mt-10 mb-16 mx-auto relative z-10">
                 <PageHeader
                     title="Your Courses"
                     description="Manage and continue your learning journey"
@@ -343,7 +343,7 @@ export default function page() {
 
                             {/* Archive Status Filter */}
                             <Select value={archiveFilter} onValueChange={setArchiveFilter}>
-                                <SelectTrigger className="w-[140px] h-9 bg-card/50 backdrop-blur-sm border-border/50">
+                                <SelectTrigger className="w-35 h-9 bg-card/50 backdrop-blur-sm border-border/50">
                                     <SelectValue placeholder="Status" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -355,7 +355,7 @@ export default function page() {
 
                             {/* Difficulty Filter */}
                             <Select value={difficultyFilter} onValueChange={setDifficultyFilter}>
-                                <SelectTrigger className="w-[160px] h-9 bg-card/50 backdrop-blur-sm border-border/50">
+                                <SelectTrigger className="w-40 h-9 bg-card/50 backdrop-blur-sm border-border/50">
                                     <SelectValue placeholder="Difficulty" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -368,7 +368,7 @@ export default function page() {
 
                             {/* Archive Filter */}
                             <Select value={archiveFilter} onValueChange={setArchiveFilter}>
-                                <SelectTrigger className="w-[140px] h-9 bg-card/50 backdrop-blur-sm border-border/50">
+                                <SelectTrigger className="w-35 h-9 bg-card/50 backdrop-blur-sm border-border/50">
                                     <SelectValue placeholder="Status" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -380,7 +380,7 @@ export default function page() {
 
                             {/* Sort By */}
                             <Select value={sortBy} onValueChange={setSortBy}>
-                                <SelectTrigger className="w-[160px] h-9 bg-card/50 backdrop-blur-sm border-border/50">
+                                <SelectTrigger className="w-40 h-9 bg-card/50 backdrop-blur-sm border-border/50">
                                     <SelectValue placeholder="Sort by" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -418,7 +418,7 @@ export default function page() {
                             .map((_, i) => (
                                 <Skeleton
                                     key={i}
-                                    className="w-[320px] h-[280px] rounded-xl"
+                                    className="w-[320px] h-70 rounded-xl"
                                 />
                             ))
                     ) : error ? (
@@ -493,7 +493,7 @@ export default function page() {
                             {/* Create New Course Card */}
                             <ScrollReveal delay={filteredCourses.length * 50}>
                                 <HoverCard>
-                                    <Card className="w-[320px] h-[280px] relative flex items-center justify-center border-2 border-dashed border-border/50 bg-card/30 backdrop-blur-sm hover:border-blue-500/50 transition-colors">
+                                    <Card className="w-[320px] h-70 relative flex items-center justify-center border-2 border-dashed border-border/50 bg-card/30 backdrop-blur-sm hover:border-blue-500/50 transition-colors">
                                         <div className="flex flex-col items-center text-muted-foreground">
                                             <div className="w-16 h-16 rounded-full bg-blue-500/10 flex items-center justify-center mb-3">
                                                 <Plus strokeWidth={1.5} className="w-8 h-8 text-blue-500" />

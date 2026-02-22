@@ -11,7 +11,7 @@ export async function GET(request) {
     }
 
     const adminDb = getAdminDb();
-    
+
     if (!adminDb) {
       return NextResponse.json({
         xp: 0,
@@ -83,9 +83,9 @@ export async function POST(request) {
     const { userId, action, value } = await request.json();
 
     const adminDb = getAdminDb();
-    
+
     if (!adminDb) {
-      return NextResponse.json({ 
+      return NextResponse.json({
         error: "Firebase not configured",
         _warning: "Gamification features require Firebase configuration"
       }, { status: 503 });
@@ -106,7 +106,7 @@ export async function POST(request) {
       help_student: 15,
       view_course: 10,
       complete_lesson: 5,
-      correct_answer: 2, 
+      correct_answer: 2,
       generate_course: 10,
     };
 
@@ -212,7 +212,7 @@ function checkBadges(stats, action) {
   if (coursesCompleted >= 10 && !currentBadges.includes("scholar")) {
     badges.push("scholar");
   }
-  const lessonsCompleted = (stats.achievements || []).filter(a => 
+  const lessonsCompleted = (stats.achievements || []).filter(a =>
     a.title === "Lesson Complete!" || a.title === "Chapter Complete!"
   ).length;
   if (lessonsCompleted >= 100 && !currentBadges.includes("bookworm")) {

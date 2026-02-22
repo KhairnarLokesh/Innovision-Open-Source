@@ -112,7 +112,7 @@ export default function OfflinePage() {
         {!premiumStatus.isPremium && (
           <ScrollReveal delay={100}>
             <Card className="bg-linear-to-r from-yellow-500/10 to-orange-500/10 border-2 border-yellow-500/30 backdrop-blur-sm">
-              <CardContent className="pt-6">
+              <CardContent className="py-2">
                 <div className="flex items-start gap-4">
                   <div className="shrink-0 w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center">
                     <Crown className="h-6 w-6 text-black" />
@@ -123,7 +123,7 @@ export default function OfflinePage() {
                       <strong className="text-orange-600">Free users can download only 1 course for offline access.</strong>
                       {" "}Upgrade to Premium for unlimited offline downloads!
                     </p>
-                    <div className="flex items-center gap-4 text-sm">
+                    <div className="flex items-center gap-4 pt-2 text-sm">
                       <span className="font-semibold">
                         Downloaded: {offlineCourses.length}/1
                       </span>

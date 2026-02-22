@@ -84,7 +84,7 @@ export default function StreakCalendar({ userId }) {
           </div>
         ) : (
           <div className="overflow-x-auto pb-1 mt-2">
-            <div className="min-w-[700px] flex flex-col gap-1">
+            <div className="min-w-175 flex flex-col gap-1">
               {/* Month labels */}
               <div className="flex gap-0.5">
                 <div className="w-4"></div>

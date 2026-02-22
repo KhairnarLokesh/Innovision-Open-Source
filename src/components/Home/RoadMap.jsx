@@ -63,7 +63,7 @@ function Roadmap({ roadMap, id }) {
       if (response.ok) {
         toast.success(data.message || "Course duplicated successfully!");
         hideLoader();
-        
+
         // Redirect to the new duplicated course
         setTimeout(() => {
           router.push(`/roadmap/${data.newRoadmapId}`);
@@ -87,7 +87,7 @@ function Roadmap({ roadMap, id }) {
             <h1 className="text-2xl font-semibold">{roadMap.courseTitle}</h1>
             <p className="text-primary ml-2">{roadMap.courseDescription}</p>
           </div>
-          
+
           {/* Action Buttons */}
           <div className="flex gap-2 shrink-0">
             <ExportCourse
@@ -111,7 +111,7 @@ function Roadmap({ roadMap, id }) {
             </Button>
           </div>
         </div>
-        
+
         {/* Estimated Time Badge */}
         <div className="flex items-center gap-2 mt-3 ml-2">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-sm">

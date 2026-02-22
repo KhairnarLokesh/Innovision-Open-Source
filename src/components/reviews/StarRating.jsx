@@ -45,16 +45,14 @@ const StarRating = ({ rating, onRatingChange, readonly = false, size = "md" }) =
           onMouseEnter={() => handleMouseEnter(value)}
           onMouseLeave={handleMouseLeave}
           disabled={readonly}
-          className={`${
-            readonly ? "cursor-default" : "cursor-pointer hover:scale-110"
-          } transition-transform`}
+          className={`${readonly ? "cursor-default" : "cursor-pointer hover:scale-110"
+            } transition-transform`}
         >
           <Star
-            className={`${starSize} ${
-              value <= displayRating
+            className={`${starSize} ${value <= displayRating
                 ? "fill-yellow-400 text-yellow-400"
                 : "fill-none text-gray-300 dark:text-gray-600"
-            }`}
+              }`}
           />
         </button>
       ))}

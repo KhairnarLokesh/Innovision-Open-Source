@@ -273,7 +273,7 @@ export default function YouTubeCourse() {
       <PageBackground />
       <GridPattern opacity={0.02} />
 
-      <div className="max-w-5xl mx-auto relative z-10">
+      <div className="max-w-5xl mx-auto my-10 relative z-10">
         <PageHeader
           title="YouTube to Course Generator"
           description="Transform any YouTube video into a comprehensive, interactive learning course"
@@ -285,7 +285,7 @@ export default function YouTubeCourse() {
         {/* Premium Banner */}
         {!premiumStatus.isPremium && (
           <ScrollReveal delay={100}>
-            <div className="mb-6 p-4 bg-linear-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-xl backdrop-blur-sm">
+            <div className="mb-6 p-5 bg-linear-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-xl backdrop-blur-sm">
               <div className="flex items-start gap-3">
                 <div className="shrink-0 w-10 h-10 bg-linear-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg shadow-yellow-500/25">
                   <Crown className="h-5 w-5 text-black" />
@@ -312,7 +312,7 @@ export default function YouTubeCourse() {
           <HoverCard>
             <Card className="bg-card/50 backdrop-blur-sm border-border/50 mb-6">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 mb-2">
                   <div className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center">
                     <Youtube className="h-6 w-6 text-red-500" />
                   </div>
@@ -334,7 +334,7 @@ export default function YouTubeCourse() {
                   <Button
                     onClick={generateCourse}
                     disabled={isProcessing}
-                    className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 transition-all duration-300 min-w-[160px]"
+                    className="bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 transition-all duration-300 min-w-40"
                   >
                     {isProcessing ? (
                       <>
@@ -565,7 +565,7 @@ export default function YouTubeCourse() {
                   const Icon = feature.icon;
                   return (
                     <div key={index} className="flex gap-3 p-3 rounded-lg bg-muted/20 hover:bg-muted/30 transition-colors">
-                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                         <Icon className="h-5 w-5 text-primary" />
                       </div>
                       <div>

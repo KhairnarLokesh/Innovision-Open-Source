@@ -78,7 +78,7 @@ export async function POST(request, { params }) {
 
     // Update course visibility using admin SDK
     const courseRef = adminDb.collection("users").doc(userId).collection("roadmaps").doc(id);
-    
+
     // Check if course exists
     const courseSnap = await courseRef.get();
     if (!courseSnap.exists) {

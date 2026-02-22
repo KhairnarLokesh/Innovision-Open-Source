@@ -101,9 +101,9 @@ export default function ContactPage() {
         ))}
       </div>
 
-      <div className="flex-1 flex flex-col relative z-10 pt-24">
+      <div className="flex-1 flex flex-col relative z-10 py-10">
         <ToastContainer />
-        <div className="bg-transparent py-12 px-4">
+        <div className="bg-transparent px-4">
           <ScrollReveal>
             <div className="max-w-3xl mx-auto text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 border border-white/10 rounded-full mb-6">
@@ -129,8 +129,8 @@ export default function ContactPage() {
                       <input
                         type="email"
                         placeholder="Email"
-                        className="w-full px-6 py-4 rounded-full  bg-black/40 border border-white/15  text-white placeholder:text-gray-500 
-                       focus:outline-none focus:ring-2  focus:ring-blue-500/40 focus:border-blue-500/40  transition-all font-light"
+                        className="w-full px-6 py-4 rounded-xl bg-black/40 border border-white/15 text-white placeholder:text-gray-500 
+                       focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/40 transition-all font-light"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
@@ -154,8 +154,8 @@ export default function ContactPage() {
                         type="submit"
                         ref={formRef}
                         className="relative bg-blue-500 hover:bg-blue-600 text-white px-10 py-3.5 rounded-full font-medium transition-all duration-300 
-                      hover:scale-[1.06] hover:shadow-[0_0_25px_rgba(59,130,246,0.6)] focus:outline-none focus:ring-2 focus:ring-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed 
-                      flex items-center gap-2">
+                      hover:shadow-[0_0_25px_rgba(59,130,246,0.6)] focus:outline-none focus:ring-2 focus:ring-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed 
+                      flex items-center gap-2 cursor-pointer w-full justify-center">
                         <Send className="h-4 w-4" />
                         Send Message
                       </button>
@@ -191,8 +191,8 @@ export default function ContactPage() {
               </div>
             </ScrollReveal>
           )}
+        </div>
       </div>
-    </div>
     </div >
   );
 }

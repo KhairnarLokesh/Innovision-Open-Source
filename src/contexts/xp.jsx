@@ -107,7 +107,7 @@ export const XpProvider = ({ children }) => {
         if (newCombo === 2 || newCombo === 5 || newCombo === 10 || newCombo === 20) {
           fireConfetti("combo");
         }
-        
+
         // Clear existing hide timeout
         if (comboHideTimeoutRef.current) {
           clearTimeout(comboHideTimeoutRef.current);
@@ -204,7 +204,7 @@ export const XpProvider = ({ children }) => {
         const timeoutId = setTimeout(() => achievements.level25(), 3500);
         milestoneTimeoutRef.current.push(timeoutId);
       }
-      
+
       setLevelUpData({
         newLevel,
         xpGained: newXP - oldXP,

@@ -206,8 +206,8 @@ const ReviewList = ({ courseId, onEditReview, onReviewDeleted, onReviewsUpdated,
                         className="h-full bg-yellow-400"
                         style={{
                           width: `${stats.totalReviews > 0
-                              ? (stats.distribution[star] / stats.totalReviews) * 100
-                              : 0
+                            ? (stats.distribution[star] / stats.totalReviews) * 100
+                            : 0
                             }%`,
                         }}
                       />
@@ -230,7 +230,7 @@ const ReviewList = ({ courseId, onEditReview, onReviewDeleted, onReviewsUpdated,
             {reviews.length} {reviews.length === 1 ? "Review" : "Reviews"}
           </h3>
           <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-45">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -389,7 +389,7 @@ const ReviewList = ({ courseId, onEditReview, onReviewDeleted, onReviewsUpdated,
             value={reportReason}
             onChange={(e) => setReportReason(e.target.value)}
             placeholder="Describe why this review should be reported..."
-            className="w-full min-h-[100px] p-3 border rounded-md resize-none"
+            className="w-full min-h-25 p-3 border rounded-md resize-none"
             maxLength={500}
           />
           <AlertDialogFooter>

@@ -21,9 +21,9 @@ export async function getUserCreatedAt(userEmail) {
   try {
     const db = await getDb();
     if (!db) return null;
-    
+
     const userDoc = await db.collection("users").doc(userEmail).get();
-    
+
     if (!userDoc.exists) {
       return null;
     }
@@ -45,9 +45,9 @@ export async function checkTrialStatus(userEmail) {
   try {
     const db = await getDb();
     if (!db) return { isInTrial: true, daysRemaining: 7, trialExpired: false };
-    
+
     const userDoc = await db.collection("users").doc(userEmail).get();
-    
+
     if (!userDoc.exists) {
       return { isInTrial: true, daysRemaining: 7, trialExpired: false };
     }
@@ -79,9 +79,9 @@ export async function isPremiumUser(userEmail) {
   try {
     const db = await getDb();
     if (!db) return false;
-    
+
     const userDoc = await db.collection("users").doc(userEmail).get();
-    
+
     if (!userDoc.exists) {
       return false;
     }
@@ -133,7 +133,7 @@ export async function getUserCourseCount(userEmail) {
   try {
     const db = await getDb();
     if (!db) return 0;
-    
+
     const snapshot = await db
       .collection("users")
       .doc(userEmail)
@@ -157,7 +157,7 @@ export async function getYouTubeCourseCount(userEmail) {
   try {
     const db = await getDb();
     if (!db) return 0;
-    
+
     const snapshot = await db
       .collection("users")
       .doc(userEmail)
@@ -180,7 +180,7 @@ export async function getStudioCourseCount(userEmail) {
   try {
     const db = await getDb();
     if (!db) return 0;
-    
+
     const snapshot = await db
       .collection("users")
       .doc(userEmail)
@@ -292,7 +292,7 @@ export async function activatePremium(userEmail, durationMonths = 1, paymentId) 
   try {
     const db = await getDb();
     if (!db) return false;
-    
+
     const expiryDate = new Date();
     expiryDate.setMonth(expiryDate.getMonth() + durationMonths);
 

@@ -276,7 +276,7 @@ export default function PremiumPage() {
         }}
       />
 
-      <div className="max-w-6xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10">
         <ScrollReveal>
           <div className="text-center mb-12">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-linear-to-br from-yellow-400 to-orange-500 rounded-full mb-4 shadow-lg shadow-yellow-500/25">
@@ -485,7 +485,7 @@ export default function PremiumPage() {
 
         {/* All Features Section */}
         <ScrollReveal delay={200}>
-          <div className="mb-12">
+          <div className="mb-16 pt-8">
             <h2 className="text-2xl font-bold text-center mb-8">All Premium Features</h2>
             <StaggerChildren className="grid grid-cols-2 md:grid-cols-4 gap-4" staggerDelay={50}>
               <HoverCard>
@@ -605,7 +605,7 @@ export default function PremiumPage() {
 
         {/* FAQ or Trust Section */}
         <ScrollReveal delay={400}>
-          <div className="text-center text-sm text-muted-foreground">
+          <div className="text-center text-sm text-muted-foreground pt-5">
             <p>Secure payments powered by Razorpay. Cancel anytime.</p>
             <p className="mt-1">Questions? Contact us at vikas.ambalazari@gmail.com</p>
           </div>

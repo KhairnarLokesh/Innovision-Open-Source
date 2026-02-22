@@ -18,7 +18,7 @@ const CertificateGenerator = ({ certificateData }) => {
   const generateCertificate = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
-    
+
     // Set canvas size (A4 landscape ratio)
     canvas.width = 1200;
     canvas.height = 850;
@@ -35,7 +35,7 @@ const CertificateGenerator = ({ certificateData }) => {
     ctx.strokeStyle = "#ffffff";
     ctx.lineWidth = 8;
     ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
-    
+
     // Inner border
     ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
     ctx.lineWidth = 2;
@@ -80,7 +80,7 @@ const CertificateGenerator = ({ certificateData }) => {
     const words = courseTitle.split(" ");
     let line = "";
     let y = 470;
-    
+
     for (let i = 0; i < words.length; i++) {
       const testLine = line + words[i] + " ";
       const metrics = ctx.measureText(testLine);
@@ -133,11 +133,11 @@ const CertificateGenerator = ({ certificateData }) => {
 
   const shareCertificate = async () => {
     const canvas = canvasRef.current;
-    
+
     try {
       const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
       const file = new File([blob], `certificate_${certificateId}.png`, { type: "image/png" });
-      
+
       if (navigator.share && navigator.canShare({ files: [file] })) {
         await navigator.share({
           title: "My InnoVision Certificate",
@@ -163,7 +163,7 @@ const CertificateGenerator = ({ certificateData }) => {
         ref={canvasRef}
         className="border-4 border-gray-200 dark:border-gray-700 rounded-lg shadow-2xl max-w-full h-auto"
       />
-      
+
       <div className="flex gap-4">
         <Button onClick={downloadCertificate} className="gap-2">
           <Download className="h-4 w-4" />

@@ -106,7 +106,7 @@ export default function ChatBot({ courseId, chapterId, courseTitle }) {
             {!isOpen && (
                 <button
                     onClick={() => setIsOpen(true)}
-                    className="fixed bottom-6 right-20 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-500/30 flex items-center justify-center hover:scale-105 hover:shadow-xl hover:shadow-purple-500/40 transition-all duration-200 group"
+                    className="fixed bottom-6 right-20 z-50 w-14 h-14 rounded-full bg-linear-to-br from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-500/30 flex items-center justify-center hover:scale-105 hover:shadow-xl hover:shadow-purple-500/40 transition-all duration-200 group"
                     title="Ask AI about this course"
                 >
                     <MessageCircle className="h-6 w-6 group-hover:scale-110 transition-transform" />
@@ -116,11 +116,11 @@ export default function ChatBot({ courseId, chapterId, courseTitle }) {
             )}
 
             {isOpen && (
-                <div className="fixed bottom-6 right-6 z-50 w-[380px] max-w-[calc(100vw-2rem)] h-[520px] max-h-[calc(100vh-4rem)] rounded-2xl border border-border/60 bg-background/95 backdrop-blur-xl shadow-2xl shadow-black/20 flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 fade-in duration-300">
+                <div className="fixed bottom-6 right-6 z-50 w-95 max-w-[calc(100vw-2rem)] h-130 max-h-[calc(100vh-4rem)] rounded-2xl border border-border/60 bg-background/95 backdrop-blur-xl shadow-2xl shadow-black/20 flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 fade-in duration-300">
 
-                    <div className="flex items-center justify-between px-4 py-3 border-b border-border/50 bg-gradient-to-r from-purple-500/10 to-blue-500/10">
+                    <div className="flex items-center justify-between px-4 py-3 border-b border-border/50 bg-linear-to-r from-purple-500/10 to-blue-500/10">
                         <div className="flex items-center gap-2 min-w-0">
-                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center shrink-0">
+                            <div className="w-8 h-8 rounded-full bg-linear-to-br from-purple-500 to-blue-500 flex items-center justify-center shrink-0">
                                 <Bot className="h-4 w-4 text-white" />
                             </div>
                             <div className="min-w-0">
@@ -161,7 +161,7 @@ export default function ChatBot({ courseId, chapterId, courseTitle }) {
                     <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4 scrollbar-thin">
                         {messages.length === 0 && (
                             <div className="flex flex-col items-center justify-center h-full text-center px-4 gap-3 opacity-80">
-                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center">
+                                <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center">
                                     <Bot className="h-7 w-7 text-purple-500" />
                                 </div>
                                 <div>
@@ -208,7 +208,7 @@ export default function ChatBot({ courseId, chapterId, courseTitle }) {
                                 )}
                             >
                                 {msg.role === "assistant" && (
-                                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center shrink-0 mt-0.5">
+                                    <div className="w-7 h-7 rounded-full bg-linear-to-br from-purple-500 to-blue-500 flex items-center justify-center shrink-0 mt-0.5">
                                         <Bot className="h-3.5 w-3.5 text-white" />
                                     </div>
                                 )}
@@ -243,7 +243,7 @@ export default function ChatBot({ courseId, chapterId, courseTitle }) {
 
                         {loading && (
                             <div className="flex gap-2.5 justify-start">
-                                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center shrink-0">
+                                <div className="w-7 h-7 rounded-full bg-linear-to-br from-purple-500 to-blue-500 flex items-center justify-center shrink-0">
                                     <Bot className="h-3.5 w-3.5 text-white" />
                                 </div>
                                 <div className="bg-muted/60 border border-border/40 rounded-2xl rounded-bl-md px-4 py-3">

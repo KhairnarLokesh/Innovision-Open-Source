@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/auth";
@@ -198,7 +199,7 @@ export default function ContentIngestion() {
       <PageBackground />
       <GridPattern opacity={0.02} />
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="max-w-7xl mt-10 mx-auto relative z-10">
         <PageHeader
           title="Smart Content Ingestion"
           description="Upload educational documents and AI will create structured courses with chapters"
@@ -211,14 +212,13 @@ export default function ContentIngestion() {
           }
         />
 
-
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Upload Section */}
           <ScrollReveal delay={150} className="space-y-6">
             <HoverCard>
               <Card className="bg-card/50 backdrop-blur-sm border-border/50">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 mb-3">
                     <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
                       <Upload className="h-5 w-5 text-purple-500" />
                     </div>
@@ -365,7 +365,7 @@ export default function ContentIngestion() {
                   <CardTitle>Supported Formats</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2 text-sm">
+                  <ul className="space-y-2 text-sm mb-5">
                     <li className="flex items-center gap-2 p-2 rounded-lg hover:bg-muted/50 transition-colors">
                       <FileText className="h-4 w-4 text-red-500" />
                       <div>
@@ -408,7 +408,7 @@ export default function ContentIngestion() {
             <HoverCard>
               <Card className="bg-card/50 backdrop-blur-sm border-border/50">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 mb-3">
                     <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
                       <BookOpen className="h-5 w-5 text-purple-500" />
                     </div>
@@ -485,7 +485,7 @@ export default function ContentIngestion() {
                 <CardContent>
                   <div className="space-y-4">
                     <div className="p-4 border border-border/50 rounded-xl bg-background/30">
-                      <ol className="space-y-3 text-sm list-none">
+                      <ol className="space-y-4 text-sm list-none">
                         {[
                           { step: "Upload", desc: "Select a PDF, TXT, or EPUB document" },
                           { step: "Extract", desc: "AI extracts readable text from your document" },

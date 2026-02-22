@@ -76,7 +76,7 @@ export default function CoursesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background relative">
+    <div className="min-h-screen bg-background relative py-10">
       <PageBackground variant="courses" />
       <GridPattern opacity={0.02} />
 

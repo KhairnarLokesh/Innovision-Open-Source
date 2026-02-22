@@ -35,7 +35,7 @@ const DuplicateCourse = ({ id, courseTitle, onDuplicate }) => {
       if (response.ok) {
         toast.success(data.message || "Course duplicated successfully!");
         hideLoader();
-        
+
         // Refresh the course list
         if (onDuplicate) {
           onDuplicate();

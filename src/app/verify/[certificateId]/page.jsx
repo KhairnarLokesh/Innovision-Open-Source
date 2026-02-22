@@ -73,7 +73,7 @@ export default function VerifyCertificatePage() {
 
         {valid && certificate && (
           <CardContent className="space-y-4">
-            <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 p-6 rounded-lg border">
+            <div className="bg-linear-to-r from-purple-500/10 to-pink-500/10 p-6 rounded-lg border">
               <div className="flex items-center gap-3 mb-4">
                 <Award className="h-8 w-8 text-yellow-500" />
                 <div>

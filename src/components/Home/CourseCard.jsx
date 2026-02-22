@@ -62,11 +62,10 @@ const CourseCard = ({ course, onDelete, isSelectable, isSelected, onSelect }) =>
   };
 
   return (
-    <Card className={`w-[320px] h-[280px] relative group hover:shadow-lg transition-all duration-300 ${
-      isSelected ? 'border-blue-500 ring-2 ring-blue-500/20' : 'hover:border-blue-500/50'
-    } bg-card/50 backdrop-blur-sm`}>
+    <Card className={`w-[320px] h-70 relative group hover:shadow-lg transition-all duration-300 ${isSelected ? 'border-blue-500 ring-2 ring-blue-500/20' : 'hover:border-blue-500/50'
+      } bg-card/50 backdrop-blur-sm`}>
       {!isSelectable && <Link href={`/roadmap/${id}`} className="absolute inset-0 z-0" />}
-      
+
       {/* Selection Checkbox */}
       {isSelectable && (
         <div className="absolute top-3 left-3 z-20">
@@ -77,7 +76,7 @@ const CourseCard = ({ course, onDelete, isSelectable, isSelected, onSelect }) =>
           />
         </div>
       )}
-      
+
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-2">
           <CardTitle className={`text-lg line-clamp-2 leading-tight ${isSelectable ? 'pl-8' : ''}`}>
@@ -118,16 +117,15 @@ const CourseCard = ({ course, onDelete, isSelectable, isSelected, onSelect }) =>
               <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
               <span className="text-muted-foreground">Progress</span>
             </div>
-            <span className={`font-semibold ${
-              progress === 100 ? 'text-green-600 dark:text-green-400' : 
-              progress > 0 ? 'text-blue-600 dark:text-blue-400' : 
-              'text-muted-foreground'
-            }`}>
+            <span className={`font-semibold ${progress === 100 ? 'text-green-600 dark:text-green-400' :
+                progress > 0 ? 'text-blue-600 dark:text-blue-400' :
+                  'text-muted-foreground'
+              }`}>
               {progress}%
             </span>
           </div>
-          <Progress 
-            value={progress} 
+          <Progress
+            value={progress}
             className="h-2"
             indicatorClassName={getProgressColor(progress)}
           />

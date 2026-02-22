@@ -35,7 +35,7 @@ export async function GET(request) {
         const { searchParams } = new URL(request.url);
         const currentQuery = searchParams.get("query");
         const userEmail = session.user.email;
-        
+
         const userRef = adminDb.collection("users").doc(userEmail);
         const recommendationsRef = userRef.collection("recommendations").doc("state");
         const recSnap = await recommendationsRef.get();
@@ -45,19 +45,19 @@ export async function GET(request) {
         if (currentQuery && currentQuery.trim().length > 2) {
             const userDoc = await userRef.get();
             searchHistory = userDoc.exists ? (userDoc.data().searchHistory || []) : [];
-            
+
             // Add new query if not already the most recent
             if (searchHistory[0]?.query !== currentQuery) {
                 searchHistory.unshift({ query: currentQuery, timestamp: Date.now() });
             }
-            
+
             // Cleanup: Keep only last 10 queries
             if (searchHistory.length > 10) {
                 searchHistory = searchHistory.slice(0, 10);
             }
-            
+
             await userRef.update({ searchHistory });
-            
+
             // Invalidate cache for new searches to provide immediate results
             const cachedData = recSnap.exists ? recSnap.data() : null;
             if (cachedData && cachedData.queryUsed !== currentQuery) {
@@ -121,10 +121,10 @@ export async function GET(request) {
         ${availableCourses.length > 0 ? JSON.stringify(availableCourses) : "EMPTY LIBRARY"}
 
         TASK:
-        ${availableCourses.length > 0 
-            ? "Recommend 3-4 courses from the Available Courses. Prioritize matches to Active/Recent searches." 
-            : "The library is EMPTY. Suggest 4 NEW course topics (titles and short descriptions) the user should generate next based on their history. These should be ADVANCED or COMPLEMENTARY topics."
-        }
+        ${availableCourses.length > 0
+                ? "Recommend 3-4 courses from the Available Courses. Prioritize matches to Active/Recent searches."
+                : "The library is EMPTY. Suggest 4 NEW course topics (titles and short descriptions) the user should generate next based on their history. These should be ADVANCED or COMPLEMENTARY topics."
+            }
 
         Return a JSON array of objects:
         - id: ${availableCourses.length > 0 ? "the course id" : "a slugified title (e.g., 'idea-nextjs-advanced')"}
@@ -145,12 +145,12 @@ export async function GET(request) {
         });
 
         const recData = parseJson(aiResponse.choices[0].message.content);
-        
+
         let recommendations = [];
         if (recData && Array.isArray(recData)) {
             recommendations = recData.map(rec => {
                 if (rec.isIdea) return rec; // Return ideas as is
-                
+
                 const course = availableCourses.find(c => c.id === rec.id);
                 if (!course) return null;
                 return {
