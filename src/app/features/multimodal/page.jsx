@@ -124,9 +124,9 @@ export default function MultimodalPage() {
         {/* Coming Soon Banner */}
         <ScrollReveal delay={100}>
           <Card className="bg-linear-to-r from-purple-500/10 to-pink-500/10 border-2 border-purple-500/30 backdrop-blur-sm">
-            <CardContent className="pt-6">
+            <CardContent className="py-3">
               <div className="text-center space-y-3">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-500 rounded-full mb-2">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-500 rounded-full mb-5">
                   <Video className="h-8 w-8 text-white" />
                 </div>
                 <h3 className="font-bold text-2xl flex items-center justify-center gap-2">
@@ -139,10 +139,10 @@ export default function MultimodalPage() {
                   Free users can preview the interface, but full functionality will be available only for Premium users once launched.
                 </p>
                 <div className="flex items-center justify-center gap-4 pt-2">
-                  <span className="px-3 py-1 bg-purple-500 text-white text-sm font-semibold rounded-full">
+                  <span className="px-3 py-2 bg-purple-500 text-white text-sm font-semibold rounded-md">
                     In Development
                   </span>
-                  <span className="px-3 py-1 bg-yellow-500 text-black text-sm font-semibold rounded-full">
+                  <span className="px-3 py-2 bg-yellow-500 text-black text-sm font-semibold rounded-md">
                     Premium Feature
                   </span>
                 </div>
@@ -157,17 +157,17 @@ export default function MultimodalPage() {
           feature="Multimodal Content Generation"
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-5">
           <ScrollReveal delay={150}>
             <HoverCard>
               <Card className="bg-card/50 backdrop-blur-sm border-border/50">
-                <CardHeader>
-                  <CardTitle>Generate Content</CardTitle>
+                <CardHeader className="mb-2">
+                  <CardTitle className="text-xl">Generate Content</CardTitle>
                   <CardDescription>Enter your course content and select the output format</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <label className="block mb-2 text-sm font-medium">Content Type</label>
+                    <label className="block mb-3 text-sm font-medium">Content Type</label>
                     <Select value={contentType} onValueChange={setContentType}>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select content type" />
@@ -190,7 +190,7 @@ export default function MultimodalPage() {
                   </div>
 
                   <div>
-                    <label className="block mb-2 text-sm font-medium">Course Content</label>
+                    <label className="block mb-3 text-sm font-medium">Course Content</label>
                     <Textarea
                       placeholder="Enter your chapter content here..."
                       value={content}
@@ -219,7 +219,7 @@ export default function MultimodalPage() {
             <HoverCard>
               <Card className="bg-card/50 backdrop-blur-sm border-border/50">
                 <CardHeader>
-                  <CardTitle>Generated Output</CardTitle>
+                  <CardTitle className="text-xl">Generated Output</CardTitle>
                   <CardDescription>Your generated content will appear here</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -291,9 +291,9 @@ export default function MultimodalPage() {
         <ScrollReveal delay={250}>
           <Card className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="text-blue-900 dark:text-blue-100">Integration Options</CardTitle>
+              <CardTitle className="text-blue-900 dark:text-blue-100 text-xl">Integration Options</CardTitle>
             </CardHeader>
-            <CardContent className="text-sm text-blue-800 dark:text-blue-200">
+            <CardContent className="text-sm text-blue-800 dark:text-blue-200 -mt-2">
               <p className="mb-2">To generate actual audio/video files, integrate with:</p>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>

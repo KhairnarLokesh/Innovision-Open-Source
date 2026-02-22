@@ -165,8 +165,8 @@ export const PageHeader = ({
   badge,
   children
 }) => (
-  <ScrollReveal className="mb-8">
-    <div className="flex flex-col items-start gap-2">
+  <ScrollReveal className="mb-12">
+    <div className="flex flex-col items-start gap-4">
       {badge && (
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-2">
           {badge}
@@ -178,10 +178,10 @@ export const PageHeader = ({
             <Icon className="h-6 w-6" />
           </div>
         )}
-        <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{title}</h1>
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight leading-tight">{title}</h1>
       </div>
       {description && (
-        <p className="text-muted-foreground text-lg mt-1">{description}</p>
+        <p className="text-muted-foreground text-base sm:text-lg mt-1">{description}</p>
       )}
       {children}
     </div>

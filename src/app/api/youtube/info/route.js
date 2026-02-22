@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function POST(request) {
   try {
     const { url } = await request.json();
-    
+
     if (!url) {
       return NextResponse.json({ error: "URL is required" }, { status: 400 });
     }
@@ -13,7 +13,7 @@ export async function POST(request) {
       return NextResponse.json({ error: "Invalid YouTube URL" }, { status: 400 });
     }
     const videoInfo = await fetchVideoInfo(videoId);
-    
+
     return NextResponse.json({
       videoId,
       ...videoInfo
@@ -26,7 +26,7 @@ export async function POST(request) {
 
 function extractVideoId(url) {
   if (!url) return null;
-  
+
   const patterns = [
     /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
     /youtube\.com\/embed\/([^&\n?#]+)/,
@@ -44,22 +44,22 @@ function extractVideoId(url) {
 async function fetchVideoInfo(videoId) {
   try {
     const oembedUrl = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`;
-    
+
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
-    
+
     const oembedResponse = await fetch(oembedUrl, {
       signal: controller.signal
     }).catch(err => {
       console.error("oEmbed fetch error:", err);
       return null;
     });
-    
+
     clearTimeout(timeoutId);
-    
+
     if (oembedResponse && oembedResponse.ok) {
       const oembedData = await oembedResponse.json();
-      
+
       return {
         title: oembedData.title || "YouTube Video",
         author: oembedData.author_name || "Unknown",
@@ -86,19 +86,19 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const url = searchParams.get('url');
-    
+
     if (!url) {
       return NextResponse.json({ error: "URL parameter required" }, { status: 400 });
     }
-    
+
     const videoId = extractVideoId(url);
-    
+
     if (!videoId) {
       return NextResponse.json({ valid: false, error: "Invalid YouTube URL" });
     }
-    
-    return NextResponse.json({ 
-      valid: true, 
+
+    return NextResponse.json({
+      valid: true,
       videoId,
       thumbnail: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
     });

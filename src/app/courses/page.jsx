@@ -8,6 +8,7 @@ import { BookOpen, Search, User, Calendar, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { PageBackground, GridPattern, PageHeader, ScrollReveal, StaggerChildren, HoverCard } from "@/components/ui/PageWrapper";
+import ChatBot from "@/components/chat/ChatBot";
 
 export default function CoursesPage() {
   const { user } = useAuth();
@@ -75,7 +76,7 @@ export default function CoursesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background relative">
+    <div className="min-h-screen bg-background relative py-10">
       <PageBackground variant="courses" />
       <GridPattern opacity={0.02} />
 
@@ -165,6 +166,7 @@ export default function CoursesPage() {
           )}
         </div>
       </div>
+      <ChatBot />
     </div>
   );
 }

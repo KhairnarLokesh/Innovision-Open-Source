@@ -21,6 +21,8 @@ import {
 import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
 import BookmarkButton from "@/components/chapter_content/BookmarkButton";
+import ChatBot from "@/components/chat/ChatBot";
+import MarkDown from "@/components/MarkDown";
 
 export default function IngestedChapterPage() {
     const params = useParams();
@@ -400,17 +402,7 @@ export default function IngestedChapterPage() {
 
                 {/* Chapter Text */}
                 <article className="prose prose-lg dark:prose-invert max-w-none leading-relaxed">
-                    {chapter.content.split("\n\n").map((paragraph, index) => {
-                        if (!paragraph.trim()) return null;
-                        return (
-                            <p
-                                key={index}
-                                className="mb-4 text-foreground/90 leading-[1.8]"
-                            >
-                                {paragraph.trim()}
-                            </p>
-                        );
-                    })}
+                    <MarkDown content={chapter.content} />
                 </article>
 
                 <hr className="my-12 border-border/50" />
@@ -633,6 +625,12 @@ export default function IngestedChapterPage() {
                     </div>
                 </div>
             </div>
+
+            <ChatBot
+                courseId={params.courseId}
+                chapterId={params.chapterId}
+                courseTitle={courseTitle}
+            />
 
             {/* Scroll to Top Button */}
             {readProgress > 20 && (

@@ -33,6 +33,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import DesktopNav from "./DesktopNav";
 import MobileMenu from "./MobileMenu";
 import UserMenu from "./UserMenu";
+import NotificationBell from "./NotificationBell";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -51,7 +52,13 @@ const Navbar = () => {
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "light";
     setTheme(savedTheme);
-    document.documentElement.className = savedTheme;
+    if (savedTheme === "dark") {
+      document.documentElement.classList.add("dark");
+      document.documentElement.classList.remove("light");
+    } else {
+      document.documentElement.classList.add("light");
+      document.documentElement.classList.remove("dark");
+    }
   }, []);
 
   useEffect(() => {
@@ -75,7 +82,13 @@ const Navbar = () => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
-    document.documentElement.className = newTheme;
+    if (newTheme === "dark") {
+      document.documentElement.classList.add("dark");
+      document.documentElement.classList.remove("light");
+    } else {
+      document.documentElement.classList.add("light");
+      document.documentElement.classList.remove("dark");
+    }
   };
 
   useEffect(() => {
@@ -148,134 +161,137 @@ const Navbar = () => {
     <>
       <header className="h-16 w-full border-b fixed top-0 left-0 bg-background/80 backdrop-blur-xl z-50 border-border">
         <div className="h-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6 flex items-center justify-between">
-        {/* Logo - Left */}
-        <Link
-          href={user ? `/roadmap` : "/"}
-          className="flex items-center gap-1.5 sm:gap-2 hover:opacity-80 transition-opacity shrink-0"
-        >
-          <Image src="/InnoVision_LOGO-removebg-preview.png" alt="logo" width={28} height={28} className="sm:w-8 sm:h-8" />
-          <span className="text-sm sm:text-base font-light text-foreground">InnoVision</span>
-        </Link>
-
-        {/* Desktop Navigation - Centered */}
-        <DesktopNav
-          user={user}
-          createMenuItems={createMenuItems}
-          learnMenuItems={learnMenuItems}
-          moreMenuItems={moreMenuItems}
-          landingNavItems={landingNavItems}
-          isActiveLink={isActiveLink}
-        />
-
-        {/* Right Section */}
-        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-          {user && (
-            <>
-              {/* Premium Badge */}
-              {isPremium && (
-                <Link href="/premium" className="hidden lg:flex">
-                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-yellow-500/20 bg-yellow-500/10 hover:border-yellow-500/30 transition-colors">
-                    <Crown className="h-3.5 w-3.5 text-yellow-500" />
-                    <span className="text-xs font-light text-yellow-400">PRO</span>
-                  </div>
-                </Link>
-              )}
-
-              {/* XP */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-green-500/20 bg-green-500/10 cursor-help relative">
-                    <Sparkles className="h-3.5 w-3.5 text-green-500" />
-                    <span className="text-xs font-light text-green-400">{xp}</span>
-                    {show && (
-                      <motion.span
-                        initial={{ opacity: 0, y: 5 }}
-                        animate={{ opacity: 1, y: -10 }}
-                        exit={{ opacity: 0 }}
-                        className="absolute -top-2 right-0 text-xs text-green-400 font-light"
-                      >
-                        +{changed}
-                      </motion.span>
-                    )}
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent className="bg-black border-white/10">
-                  <p className="font-light text-white">Level {Math.floor(xp / 500) + 1}</p>
-                  <p className="text-xs text-gray-400 font-light">{xp} XP earned</p>
-                </TooltipContent>
-              </Tooltip>
-
-              {/* Streak */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-orange-500/20 bg-orange-500/10 cursor-help">
-                    <Flame className={`h-3.5 w-3.5 ${streak >= 7 ? 'text-red-500' : 'text-orange-500'}`} />
-                    <span className={`text-xs font-light ${streak >= 7 ? 'text-red-400' : 'text-orange-400'}`}>
-                      {streak}
-                    </span>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent className="bg-black border-white/10">
-                  <p className="font-light text-white">{streak} Day Streak!</p>
-                  <p className="text-xs text-gray-400 font-light">Keep learning daily</p>
-                </TooltipContent>
-              </Tooltip>
-            </>
-          )}
-
-          {/* Theme Toggle - Always visible */}
-          <Button variant="ghost" size="icon" onClick={toggleTheme} className="h-8 w-8 sm:h-9 sm:w-9 rounded-full hover:bg-muted text-foreground">
-            {theme === "light" ? <Moon className="h-4 w-4 sm:h-4 sm:w-4" /> : <Sun className="h-4 w-4 sm:h-4 sm:w-4" />}
-          </Button>
-
-          {/* Night Mode - Always visible */}
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleNightMode}
-                className={`h-8 w-8 sm:h-9 sm:w-9 rounded-full hover:bg-muted ${nightMode ? 'text-amber-400' : 'text-foreground'}`}
-              >
-                <MoonStar className={`h-4 w-4 sm:h-4 sm:w-4 ${nightMode ? 'fill-amber-400' : ''}`} />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent className="bg-background border-border">
-              <p className="font-light text-foreground">Night Mode (Blue Light Filter)</p>
-            </TooltipContent>
-          </Tooltip>
-
-          {/* User Menu or Login */}
-          {user ? (
-            <UserMenu
-              user={user}
-              isPremium={isPremium}
-              xp={xp}
-              streak={streak}
-              theme={theme}
-              nightMode={nightMode}
-              toggleTheme={toggleTheme}
-              toggleNightMode={toggleNightMode}
-              signOutUser={signOutUser}
-            />
-          ) : (
-            <Link href="/login" className="shrink-0">
-              <Button size="sm" className="bg-transparent border border-border hover:bg-muted text-foreground h-8 px-4 text-xs sm:text-sm sm:h-9 sm:px-5 rounded-full font-light">
-                Get Started
-              </Button>
-            </Link>
-          )}
-
-          {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden h-8 w-8 sm:h-9 sm:w-9 rounded-full hover:bg-muted text-foreground"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          {/* Logo - Left */}
+          <Link
+            href={user ? `/roadmap` : "/"}
+            className="flex items-center gap-1.5 sm:gap-2 hover:opacity-80 transition-opacity shrink-0"
           >
-            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </Button>
-        </div>
+            <Image src="/InnoVision_LOGO-removebg-preview.png" alt="logo" width={28} height={28} className="sm:w-8 sm:h-8" />
+            <span className="text-sm sm:text-base font-light text-foreground hidden min-[400px]:block">InnoVision</span>
+          </Link>
+
+          {/* Desktop Navigation - Centered */}
+          <DesktopNav
+            user={user}
+            createMenuItems={createMenuItems}
+            learnMenuItems={learnMenuItems}
+            moreMenuItems={moreMenuItems}
+            landingNavItems={landingNavItems}
+            isActiveLink={isActiveLink}
+          />
+
+          {/* Right Section */}
+          <div className="flex items-center gap-0.5 sm:gap-2 shrink-0">
+            {user && (
+              <>
+                {/* Premium Badge */}
+                {isPremium && (
+                  <Link href="/premium" className="hidden lg:flex">
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-yellow-500/20 bg-yellow-500/10 hover:border-yellow-500/30 transition-colors">
+                      <Crown className="h-3.5 w-3.5 text-yellow-500" />
+                      <span className="text-xs font-light text-yellow-400">PRO</span>
+                    </div>
+                  </Link>
+                )}
+
+                {/* XP */}
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-green-500/20 bg-green-500/10 cursor-help relative">
+                      <Sparkles className="h-3.5 w-3.5 text-green-500" />
+                      <span className="text-xs font-light text-green-400">{xp}</span>
+                      {show && (
+                        <motion.span
+                          initial={{ opacity: 0, y: 5 }}
+                          animate={{ opacity: 1, y: -10 }}
+                          exit={{ opacity: 0 }}
+                          className="absolute -top-2 right-0 text-xs text-green-400 font-light"
+                        >
+                          +{changed}
+                        </motion.span>
+                      )}
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent className="bg-black border-white/10">
+                    <p className="font-light text-white">Level {Math.floor(xp / 500) + 1}</p>
+                    <p className="text-xs text-gray-400 font-light">{xp} XP earned</p>
+                  </TooltipContent>
+                </Tooltip>
+
+                {/* Streak */}
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-orange-500/20 bg-orange-500/10 cursor-help">
+                      <Flame className={`h-3.5 w-3.5 ${streak >= 7 ? 'text-red-500' : 'text-orange-500'}`} />
+                      <span className={`text-xs font-light ${streak >= 7 ? 'text-red-400' : 'text-orange-400'}`}>
+                        {streak}
+                      </span>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent className="bg-black border-white/10">
+                    <p className="font-light text-white">{streak} Day Streak!</p>
+                    <p className="text-xs text-gray-400 font-light">Keep learning daily</p>
+                  </TooltipContent>
+                </Tooltip>
+              </>
+            )}
+
+
+            {user && <NotificationBell />}
+
+            {/* Theme Toggle - Always visible */}
+            <Button variant="ghost" size="icon" onClick={toggleTheme} className="h-8 w-8 sm:h-9 sm:w-9 rounded-full hover:bg-muted text-foreground">
+              {theme === "light" ? <Moon className="h-4 w-4 sm:h-4 sm:w-4" /> : <Sun className="h-4 w-4 sm:h-4 sm:w-4" />}
+            </Button>
+
+            {/* Night Mode - Always visible */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={toggleNightMode}
+                  className={`h-8 w-8 sm:h-9 sm:w-9 rounded-full hover:bg-muted ${nightMode ? 'text-amber-400' : 'text-foreground'}`}
+                >
+                  <MoonStar className={`h-4 w-4 sm:h-4 sm:w-4 ${nightMode ? 'fill-amber-400' : ''}`} />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent className="bg-background border-border">
+                <p className="font-light text-foreground">Night Mode (Blue Light Filter)</p>
+              </TooltipContent>
+            </Tooltip>
+
+            {/* User Menu or Login */}
+            {user ? (
+              <UserMenu
+                user={user}
+                isPremium={isPremium}
+                xp={xp}
+                streak={streak}
+                theme={theme}
+                nightMode={nightMode}
+                toggleTheme={toggleTheme}
+                toggleNightMode={toggleNightMode}
+                signOutUser={signOutUser}
+              />
+            ) : (
+              <Link href="/login" className="shrink-0">
+                <Button size="sm" className="bg-transparent border border-border hover:bg-muted text-foreground h-8 px-4 text-xs sm:text-sm sm:h-9 sm:px-5 rounded-full font-light">
+                  Get Started
+                </Button>
+              </Link>
+            )}
+
+            {/* Mobile Menu Button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden h-8 w-8 sm:h-9 sm:w-9 rounded-full hover:bg-muted text-foreground"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
+          </div>
         </div>
       </header>
 

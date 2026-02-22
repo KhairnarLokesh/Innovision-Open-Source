@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Trophy, TrendingUp, TrendingDown, Calendar, Users, Crown, Medal, Award, Minus } from "lucide-react";
+import LeaderboardSkeleton from "@/components/skeletons/LeaderboardSkeleton";
 
 export default function Leaderboard({ currentUserId }) {
   const [leaderboard, setLeaderboard] = useState({
@@ -14,6 +15,7 @@ export default function Leaderboard({ currentUserId }) {
   });
   const [previousRanks, setPreviousRanks] = useState({});
   const [animatingUsers, setAnimatingUsers] = useState(new Set());
+  const [loading, setLoading] = useState(true);
   const isFirstLoad = useRef(true);
 
   useEffect(() => {
@@ -35,6 +37,7 @@ export default function Leaderboard({ currentUserId }) {
           weekly: [],
           allTime: []
         });
+        setLoading(false);
         return;
       }
 
@@ -79,12 +82,14 @@ export default function Leaderboard({ currentUserId }) {
       }
 
       setLeaderboard(data);
+      setLoading(false);
     } catch (error) {
       setLeaderboard({
         daily: [],
         weekly: [],
         allTime: []
       });
+      setLoading(false);
     }
   };
 
@@ -120,6 +125,10 @@ export default function Leaderboard({ currentUserId }) {
   };
 
   const LeaderboardList = ({ users, period }) => {
+    if (loading) {
+      return null; // Skeleton is shown at parent level
+    }
+
     if (!users || users.length === 0) {
       return (
         <div className="text-center py-8 text-muted-foreground">
@@ -165,7 +174,7 @@ export default function Leaderboard({ currentUserId }) {
               `}
             >
               {/* Rank */}
-              <div className="w-10 flex flex-col items-center">
+              <div className="w-10 shrink-0 flex flex-col items-center">
                 {getRankIcon(rank)}
                 {rankChange}
               </div>
@@ -187,12 +196,12 @@ export default function Leaderboard({ currentUserId }) {
 
               {/* User info */}
               <div className="flex-1 min-w-0">
-                <div className="font-semibold flex items-center gap-2 truncate">
-                  <span className={isCurrentUser ? "text-blue-700 dark:text-blue-300" : ""}>
+                <div className="font-semibold flex items-center gap-2 min-w-0">
+                  <span className={`truncate text-base ${isCurrentUser ? "text-blue-700 dark:text-blue-300" : ""}`}>
                     {user.name || "Anonymous"}
                   </span>
                   {isCurrentUser && (
-                    <Badge variant="secondary" className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 text-xs">
+                    <Badge variant="secondary" className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 text-[11px] h-5 px-1.5 shrink-0">
                       You
                     </Badge>
                   )}
@@ -205,11 +214,11 @@ export default function Leaderboard({ currentUserId }) {
               </div>
 
               {/* XP */}
-              <div className="text-right">
-                <div className={`font-bold text-lg ${rank === 1 ? "text-yellow-600 dark:text-yellow-400" : ""}`}>
+              <div className="text-right shrink-0">
+                <div className={`font-bold text-lg sm:text-xl ${rank === 1 ? "text-yellow-600 dark:text-yellow-400" : ""}`}>
                   {(user.xp || 0).toLocaleString()}
                 </div>
-                <div className="text-xs text-muted-foreground">XP</div>
+                <div className="text-xs text-muted-foreground leading-none">XP</div>
               </div>
             </div>
           );
@@ -226,44 +235,50 @@ export default function Leaderboard({ currentUserId }) {
   };
 
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <Trophy className="h-5 w-5 text-yellow-500" />
-          Leaderboard
-        </CardTitle>
-        <CardDescription className="text-xs">Compete with other learners</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Tabs defaultValue="weekly">
-          <TabsList className="grid w-full grid-cols-3 h-9">
-            <TabsTrigger value="daily" className="text-xs">
-              <Calendar className="h-3 w-3 mr-1" />
-              Today
-            </TabsTrigger>
-            <TabsTrigger value="weekly" className="text-xs">
-              <TrendingUp className="h-3 w-3 mr-1" />
-              Week
-            </TabsTrigger>
-            <TabsTrigger value="allTime" className="text-xs">
-              <Users className="h-3 w-3 mr-1" />
-              All Time
-            </TabsTrigger>
-          </TabsList>
+    <>
+      {loading ? (
+        <LeaderboardSkeleton />
+      ) : (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Trophy className="h-5 w-5 text-yellow-500" />
+              Leaderboard
+            </CardTitle>
+            <CardDescription className="text-xs">Compete with other learners</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Tabs defaultValue="weekly">
+              <TabsList className="grid w-full grid-cols-3 h-9">
+                <TabsTrigger value="daily" className="text-xs">
+                  <Calendar className="h-3 w-3 mr-1" />
+                  Today
+                </TabsTrigger>
+                <TabsTrigger value="weekly" className="text-xs">
+                  <TrendingUp className="h-3 w-3 mr-1" />
+                  Week
+                </TabsTrigger>
+                <TabsTrigger value="allTime" className="text-xs">
+                  <Users className="h-3 w-3 mr-1" />
+                  All Time
+                </TabsTrigger>
+              </TabsList>
 
-          <TabsContent value="daily" className="mt-3">
-            <LeaderboardList users={leaderboard.daily} period="daily" />
-          </TabsContent>
+              <TabsContent value="daily" className="mt-3">
+                <LeaderboardList users={leaderboard.daily} period="daily" />
+              </TabsContent>
 
-          <TabsContent value="weekly" className="mt-3">
-            <LeaderboardList users={leaderboard.weekly} period="weekly" />
-          </TabsContent>
+              <TabsContent value="weekly" className="mt-3">
+                <LeaderboardList users={leaderboard.weekly} period="weekly" />
+              </TabsContent>
 
-          <TabsContent value="allTime" className="mt-3">
-            <LeaderboardList users={leaderboard.allTime} period="allTime" />
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-    </Card>
+              <TabsContent value="allTime" className="mt-3">
+                <LeaderboardList users={leaderboard.allTime} period="allTime" />
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
+      )}
+    </>
   );
 }

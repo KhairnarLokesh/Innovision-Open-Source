@@ -10,8 +10,12 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+
+
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+    let unsubscribe;
+
+    unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         try {
           // 1. Sync session cookie FIRST
@@ -55,7 +59,11 @@ export function AuthProvider({ children }) {
       setLoading(false);
     });
 
-    return () => unsubscribe();
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
   }, []);
 
   const googleSignIn = async () => {
@@ -82,16 +90,6 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const guestSignIn = async () => {
-    try {
-      const result = await signInAnonymously(auth);
-      await saveUserToFirestore(result.user, "guest");
-      return result.user;
-    } catch (error) {
-      console.error("Error signing in as guest:", error);
-      throw error;
-    }
-  };
 
   const logout = async () => {
     try {
